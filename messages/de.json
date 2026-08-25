@@ -1,0 +1,158 @@
+{
+  "Home": {
+    "title": "Deutsches Sprachinstitut",
+    "description": "Deutsch lernen für Studium, Arbeit und Alltag"
+  },
+
+  "HeroSlider": {
+    "slide1": {
+      "title": "Deutsch lernen. Zukunft gestalten.",
+      "description": "Deutschkurse für Studium, Arbeit und Alltag.",
+      "button": "Jetzt registrieren"
+    },
+    "slide2": {
+      "title": "Deutschkurse für jedes Niveau",
+      "description": "Von A1 bis B2 – mit erfahrenen Lehrkräften und modernen Lernmethoden.",
+      "button": "Kurse entdecken"
+    },
+    "slide3": {
+      "title": "Bereit für Ihre Deutschprüfung?",
+      "description": "Gezielte Vorbereitung auf Goethe, ÖSD und TestDaF.",
+      "button": "Mehr erfahren"
+    },
+    "slide4": {
+      "title": "Deutsch für Studium & Beruf",
+      "description": "Verbessern Sie Ihre Deutschkenntnisse und öffnen Sie neue Möglichkeiten.",
+      "button": "Jetzt starten"
+    }
+  },
+
+  "Header": {
+    "title": "DeutschKLUB Institut",
+    "subtitle": "Deutsche Sprachschule"
+  },
+
+  "Navbar": {
+    "home": "Startseite",
+    "exams": "Prüfungen",
+    "about": "Über uns",
+    "blog": "Blog",
+    "contact": "Kontakt",
+    "register": "Jetzt registrieren"
+  },
+
+  "MegaMenu": {
+    "title": "Kurse",
+    "courses": "Deutschkurse",
+    "teacher": "Lehrer",
+    "time": "Zeit",
+    "duration": "Dauer",
+    "format": "Format",
+    "more": "Mehr erfahren",
+    "loading": "Wird geladen...",
+    "noClasses": "Keine Kurse verfügbar.",
+    "noClassToDisplay": "Kein Kurs zum Anzeigen."
+  },
+
+  "Courses": {
+    "title": "Kurse",
+    "noClasses": "Keine Kurse verfügbar.",
+    "teacher": "Lehrer",
+    "time": "Zeit",
+    "duration": "Dauer",
+    "format": "Format",
+    "capacity": "Kapazität",
+    "register": "Anmelden"
+  },
+
+  "Footer": {
+    "title": "Deutsches Sprachinstitut",
+    "description": "Ihre Sprachschule für Deutschkurse, Prüfungen und Vorbereitung auf Studium und Arbeit.",
+    "about": "Über uns",
+    "school": "Unsere Schule",
+    "teachers": "Lehrkräfte",
+    "career": "Karriere",
+    "blog": "Blog",
+    "courses": "Kurse",
+    "a1": "A1 - Anfänger",
+    "b1": "B1 - Mittelstufe",
+    "speaking": "Sprechvorbereitung",
+    "osd": "ÖSD-Vorbereitung",
+    "contact": "Kontakt",
+    "address": "📍 Teheran, Ayat-Nordstraße, Iran",
+    "phone": "📞 +49 123 456789",
+    "email": "✉ info@deutsch-institut.de",
+    "copyright": "© 2026 Deutsches Sprachinstitut. Alle Rechte vorbehalten."
+  },
+
+  "TopBar": {
+    "course": "🇩🇪 Neue Deutschkurse ab September",
+    "goethe": "Vorbereitung auf das Goethe-Zertifikat",
+    "testdaf": "Intensivkurs TestDaF",
+    "online": "Online-Kurse jetzt verfügbar",
+    "register": "Jetzt registrieren!"
+  },
+
+  "Anmeldung": {
+    "title": "Registrierung",
+    "subtitle": "Erstellen Sie Ihr Konto und beginnen Sie, Deutsch zu lernen",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "email": "E-Mail",
+    "phone": "Telefonnummer",
+    "password": "Passwort",
+    "birthDate": "Geburtsdatum",
+    "level": {
+      "title": "Deutschniveau",
+      "a1": "A1 Anfänger",
+      "a2": "A2 Grundstufe",
+      "b1": "B1 Mittelstufe",
+      "b2": "B2 Obere Mittelstufe",
+      "c1": "C1 Fortgeschritten"
+    },
+    "submit": "Jetzt registrieren",
+    "back": "Zurück"
+  },
+
+  "Login": {
+    "title": "Anmelden",
+    "subtitle": "Melden Sie sich bei Ihrem Konto an",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "submit": "Anmelden",
+    "register": "Konto erstellen",
+    "back": "Zurück"
+  },
+
+  "Profile": {
+    "title": "Profil",
+    "subtitle": "Persönliche Informationen",
+    "personalInformation": "Persönliche Informationen",
+    "accountDetails": "Ihre Kontodaten",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "email": "E-Mail",
+    "birthDate": "Geburtsdatum",
+    "level": "Deutschniveau",
+    "loading": "Wird geladen..."
+  },
+
+  "VerifyPhone": {
+    "title": "Telefonnummer bestätigen",
+    "subtitle": "Geben Sie den 6-stelligen Code ein, den wir an Ihre Telefonnummer gesendet haben.",
+    "codePlaceholder": "123456",
+    "verify": "Code bestätigen",
+    "verifying": "Wird überprüft...",
+    "invalidCode": "Bitte geben Sie einen gültigen 6-stelligen Code ein.",
+    "userNotFound": "Die Benutzer-ID wurde nicht gefunden.",
+    "expired": "Der Bestätigungscode ist abgelaufen.",
+    "wrongCode": "Der Bestätigungscode ist falsch.",
+    "success": "Ihre Telefonnummer wurde erfolgreich bestätigt.",
+    "error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+  },
+
+  "ChatWidget": {
+    "message": "👋 Wie kann ich Ihnen helfen?",
+    "contact": "Kontakt"
+  }
+}

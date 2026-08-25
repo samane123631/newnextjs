@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                    Int       @id @default(autoincrement())
+  firstName             String
+  lastName              String
+  email                 String    @unique
+  password              String
+  birthDate             DateTime
+  level                 String
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  phone                 String?
+  phoneVerified         Boolean   @default(false)
+  verificationCode      String?
+  role                  String    @default("USER")
+  verificationExpiresAt DateTime?
+
+  sessions Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    Int
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: Cascade
+  )
+}
+
+model ContactMessage {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model News {
+  id        Int      @id @default(autoincrement())
+
+  titleFa   String
+  contentFa String
+
+  titleDe   String
+  contentDe String
+
+  titleEn   String
+  contentEn String
+
+  published Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Class {
+  id Int @id @default(autoincrement())
+
+  title       String?
+  description String?
+
+  titleFa String?
+  titleDe String?
+  titleEn String?
+
+  descriptionFa String?
+  descriptionDe String?
+  descriptionEn String?
+
+  teacher String?
+
+  day       String
+  startTime String
+  endTime   String
+
+  format String?
+
+  startDate DateTime?
+  endDate   DateTime?
+
+  maxStudents Int @default(7)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

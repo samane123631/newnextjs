@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+  color: #111827;
+  font-family: Arial, Helvetica, sans-serif;
+}
+@keyframes marquee {
+
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+
+}
+
+.animate-marquee {
+
+  display: inline-block;
+
+  animation: marquee 18s linear infinite;
+
+}
+@media (max-width: 639px) {
+  .profile-table {
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .profile-table td {
+    padding: 12px 10px;
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+
+  .profile-table td:first-child {
+    width: 45%;
+    white-space: nowrap;
+  }
+
+  .profile-table td:last-child {
+    width: 55%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}

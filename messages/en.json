@@ -1,0 +1,158 @@
+{
+  "Home": {
+    "title": "German Language Institute",
+    "description": "Learn German for study, work, and everyday life"
+  },
+
+  "HeroSlider": {
+    "slide1": {
+      "title": "Learn German. Shape Your Future.",
+      "description": "German courses for study, work, and everyday life.",
+      "button": "Register Now"
+    },
+    "slide2": {
+      "title": "German Courses for Every Level",
+      "description": "From A1 to B2 with experienced teachers and modern learning methods.",
+      "button": "Explore Courses"
+    },
+    "slide3": {
+      "title": "Ready for Your German Exam?",
+      "description": "Targeted preparation for Goethe, ÖSD, and TestDaF exams.",
+      "button": "Learn More"
+    },
+    "slide4": {
+      "title": "German for Study & Work",
+      "description": "Improve your German skills and open up new opportunities.",
+      "button": "Get Started"
+    }
+  },
+
+  "Header": {
+    "title": "DeutschKLUB Institute",
+    "subtitle": "German Language School"
+  },
+
+  "Navbar": {
+    "home": "Home",
+    "exams": "Exams",
+    "about": "About Us",
+    "blog": "Blog",
+    "contact": "Contact",
+    "register": "Register Now"
+  },
+
+  "MegaMenu": {
+    "title": "Courses",
+    "courses": "German Courses",
+    "teacher": "Teacher",
+    "time": "Time",
+    "duration": "Duration",
+    "format": "Format",
+    "more": "Learn More",
+    "loading": "Loading...",
+    "noClasses": "No classes available.",
+    "noClassToDisplay": "No class to display."
+  },
+
+  "Courses": {
+    "title": "Courses",
+    "noClasses": "No courses available.",
+    "teacher": "Teacher",
+    "time": "Time",
+    "duration": "Duration",
+    "format": "Format",
+    "capacity": "Capacity",
+    "register": "Register"
+  },
+
+  "Footer": {
+    "title": "German Language Institute",
+    "description": "Your language school for German courses, exams, and preparation for study and work.",
+    "about": "About Us",
+    "school": "Our School",
+    "teachers": "Teachers",
+    "career": "Careers",
+    "blog": "Blog",
+    "courses": "Courses",
+    "a1": "A1 - Beginner",
+    "b1": "B1 - Intermediate",
+    "speaking": "Speaking Preparation",
+    "osd": "ÖSD Preparation",
+    "contact": "Contact",
+    "address": "📍 Tehran, Ayat North Street, Iran",
+    "phone": "📞 +49 123 456789",
+    "email": "✉ info@deutsch-institut.de",
+    "copyright": "© 2026 German Language Institute. All rights reserved."
+  },
+
+  "TopBar": {
+    "course": "🇩🇪 New German courses starting in September",
+    "goethe": "Goethe Certificate Preparation",
+    "testdaf": "Intensive TestDaF Course",
+    "online": "Online courses are now available",
+    "register": "Register Now!"
+  },
+
+  "Anmeldung": {
+    "title": "Registration",
+    "subtitle": "Create your account and start learning German",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "password": "Password",
+    "birthDate": "Date of Birth",
+    "level": {
+      "title": "German Level",
+      "a1": "A1 Beginner",
+      "a2": "A2 Elementary",
+      "b1": "B1 Intermediate",
+      "b2": "B2 Upper Intermediate",
+      "c1": "C1 Advanced"
+    },
+    "submit": "Register",
+    "back": "Back"
+  },
+
+  "Login": {
+    "title": "Login",
+    "subtitle": "Sign in to your account",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Login",
+    "register": "Create Account",
+    "back": "Back"
+  },
+
+  "Profile": {
+    "title": "Profile",
+    "subtitle": "Personal Information",
+    "personalInformation": "Personal Information",
+    "accountDetails": "Your Account Details",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "birthDate": "Date of Birth",
+    "level": "German Level",
+    "loading": "Loading..."
+  },
+
+  "VerifyPhone": {
+    "title": "Verify Phone Number",
+    "subtitle": "Enter the 6-digit code we sent to your phone number.",
+    "codePlaceholder": "123456",
+    "verify": "Verify Code",
+    "verifying": "Verifying...",
+    "invalidCode": "Please enter a valid 6-digit code.",
+    "userNotFound": "User ID was not found.",
+    "expired": "The verification code has expired.",
+    "wrongCode": "The verification code is incorrect.",
+    "success": "Your phone number has been successfully verified.",
+    "error": "An error occurred. Please try again."
+  },
+
+  "ChatWidget": {
+    "message": "👋 How can I help you?",
+    "contact": "Contact"
+  }
+}
