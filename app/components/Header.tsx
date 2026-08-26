@@ -45,7 +45,6 @@ const searchItems: SearchItem[] = [
     },
     type: "mega",
   },
-
   {
     id: "registration",
     keywords: [
@@ -69,7 +68,6 @@ const searchItems: SearchItem[] = [
     type: "page",
     path: "anmeldung",
   },
-
   {
     id: "contact",
     keywords: [
@@ -91,7 +89,6 @@ const searchItems: SearchItem[] = [
     type: "page",
     path: "contact",
   },
-
   {
     id: "news",
     keywords: [
@@ -112,7 +109,6 @@ const searchItems: SearchItem[] = [
     type: "page",
     path: "news",
   },
-
   {
     id: "login",
     keywords: [
@@ -133,7 +129,6 @@ const searchItems: SearchItem[] = [
     type: "page",
     path: "login",
   },
-
   {
     id: "profile",
     keywords: [
@@ -160,8 +155,7 @@ export default function Header() {
   const t = useTranslations("Header");
 
   const [search, setSearch] = useState("");
-  const [showSuggestions, setShowSuggestions] =
-    useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -281,7 +275,7 @@ export default function Header() {
           <Navbar />
 
           {/* Search */}
-          <div className="relative">
+          <div className="relative min-w-0">
             <div
               className="
                 flex
@@ -447,7 +441,10 @@ export default function Header() {
           {/* Admin */}
           <button
             type="button"
-            onClick={openAdminLogin}
+            onClick={() => {
+              alert("JS WORKS");
+              openAdminLogin();
+            }}
             className="
               shrink-0
               whitespace-nowrap
