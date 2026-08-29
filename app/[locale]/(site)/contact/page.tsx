@@ -121,9 +121,8 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen bg-gray-50 px-4 py-10">
-      <div className="mx-auto max-w-2xl">
-
-        <div className="rounded-2xl bg-white p-6 shadow-md sm:p-8">
+      <div className="flex w-full items-center justify-center">
+        <div className="w-full max-w-2xl rounded-2xl bg-white p-6 shadow-md sm:p-8">
 
           <h1 className="text-3xl font-bold text-blue-700">
             {t.title}
@@ -135,7 +134,7 @@ export default function ContactPage() {
 
           <form
             onSubmit={handleSubmit}
-            className="mt-8 space-y-6"
+            className="mt-8 flex flex-col gap-6"
           >
 
             {/* Name */}
@@ -156,7 +155,23 @@ export default function ContactPage() {
                   setName(event.target.value)
                 }
                 placeholder={t.namePlaceholder}
-                className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                className="
+                  w-full
+                  rounded-lg
+                  border-2
+                  border-gray-300
+                  px-4
+                  py-3
+                  font-normal
+                  text-gray-900
+                  outline-none
+                  transition
+                  placeholder:font-normal
+                  placeholder:text-gray-400
+                  focus:border-blue-500
+                  focus:ring-2
+                  focus:ring-blue-200
+                "
               />
             </div>
 
@@ -178,7 +193,24 @@ export default function ContactPage() {
                 }
                 placeholder={t.messagePlaceholder}
                 rows={7}
-                className="w-full resize-none rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                className="
+                  w-full
+                  resize-none
+                  rounded-lg
+                  border-2
+                  border-gray-300
+                  px-4
+                  py-3
+                  font-normal
+                  text-gray-900
+                  outline-none
+                  transition
+                  placeholder:font-normal
+                  placeholder:text-gray-400
+                  focus:border-blue-500
+                  focus:ring-2
+                  focus:ring-blue-200
+                "
               />
             </div>
 
@@ -200,7 +232,19 @@ export default function ContactPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="
+                w-full
+                rounded-lg
+                bg-blue-600
+                px-6
+                py-3
+                font-semibold
+                text-white
+                transition
+                hover:bg-blue-700
+                disabled:cursor-not-allowed
+                disabled:opacity-50
+              "
             >
               {loading ? t.sending : t.send}
             </button>
@@ -208,7 +252,6 @@ export default function ContactPage() {
           </form>
 
         </div>
-
       </div>
     </main>
   );

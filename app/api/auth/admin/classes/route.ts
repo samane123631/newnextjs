@@ -46,6 +46,8 @@ export async function POST(request: Request) {
       startDate,
       endDate,
       maxStudents,
+      price,
+      currency,
     } = body;
 
     if (
@@ -81,6 +83,26 @@ export async function POST(request: Request) {
         {
           success: false,
           message: "ظرفیت کلاس باید بین 1 تا 7 نفر باشد.",
+        },
+        { status: 400 }
+      );
+    }
+
+    const classPrice =
+      price === undefined ||
+      price === null ||
+      price === ""
+        ? null
+        : Number(price);
+
+    if (
+      classPrice !== null &&
+      (!Number.isFinite(classPrice) || classPrice < 0)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "مبلغ کلاس معتبر نیست.",
         },
         { status: 400 }
       );
@@ -128,6 +150,13 @@ export async function POST(request: Request) {
           : null,
 
         maxStudents: capacity,
+
+        price: classPrice,
+
+        currency:
+          currency && String(currency).trim()
+            ? String(currency).trim().toUpperCase()
+            : "EUR",
       },
     });
 
@@ -140,10 +169,7 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error(
-      "ADMIN CLASSES POST ERROR:",
-      error
-    );
+    console.error("ADMIN CLASSES POST ERROR:", error);
 
     return NextResponse.json(
       {
@@ -174,6 +200,8 @@ export async function PUT(request: Request) {
       startDate,
       endDate,
       maxStudents,
+      price,
+      currency,
     } = body;
 
     if (!id) {
@@ -224,55 +252,81 @@ export async function PUT(request: Request) {
       );
     }
 
-    const updatedClass =
-      await prisma.class.update({
-        where: {
-          id: Number(id),
+    const classPrice =
+      price === undefined ||
+      price === null ||
+      price === ""
+        ? null
+        : Number(price);
+
+    if (
+      classPrice !== null &&
+      (!Number.isFinite(classPrice) || classPrice < 0)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "مبلغ کلاس معتبر نیست.",
         },
+        { status: 400 }
+      );
+    }
 
-        data: {
-          titleFa: String(titleFa).trim(),
-          titleDe: String(titleDe).trim(),
-          titleEn: String(titleEn).trim(),
+    const updatedClass = await prisma.class.update({
+      where: {
+        id: Number(id),
+      },
 
-          descriptionFa:
-            descriptionFa &&
-            String(descriptionFa).trim()
-              ? String(descriptionFa).trim()
-              : null,
+      data: {
+        titleFa: String(titleFa).trim(),
+        titleDe: String(titleDe).trim(),
+        titleEn: String(titleEn).trim(),
 
-          descriptionDe:
-            descriptionDe &&
-            String(descriptionDe).trim()
-              ? String(descriptionDe).trim()
-              : null,
-
-          descriptionEn:
-            descriptionEn &&
-            String(descriptionEn).trim()
-              ? String(descriptionEn).trim()
-              : null,
-
-          day: String(day),
-          startTime: String(startTime),
-          endTime: String(endTime),
-
-          format:
-            format && String(format).trim()
-              ? String(format).trim()
-              : null,
-
-          startDate: startDate
-            ? new Date(startDate)
+        descriptionFa:
+          descriptionFa &&
+          String(descriptionFa).trim()
+            ? String(descriptionFa).trim()
             : null,
 
-          endDate: endDate
-            ? new Date(endDate)
+        descriptionDe:
+          descriptionDe &&
+          String(descriptionDe).trim()
+            ? String(descriptionDe).trim()
             : null,
 
-          maxStudents: capacity,
-        },
-      });
+        descriptionEn:
+          descriptionEn &&
+          String(descriptionEn).trim()
+            ? String(descriptionEn).trim()
+            : null,
+
+        day: String(day),
+        startTime: String(startTime),
+        endTime: String(endTime),
+
+        format:
+          format && String(format).trim()
+            ? String(format).trim()
+            : null,
+
+        startDate: startDate
+          ? new Date(startDate)
+          : null,
+
+        endDate: endDate
+          ? new Date(endDate)
+          : null,
+
+        maxStudents: capacity,
+
+        price: classPrice,
+
+        currency:
+          currency && String(currency).trim()
+            ? String(currency).trim().toUpperCase()
+            : "EUR",
+      },
+    });
 
     return NextResponse.json({
       success: true,
@@ -280,10 +334,7 @@ export async function PUT(request: Request) {
       class: updatedClass,
     });
   } catch (error) {
-    console.error(
-      "ADMIN CLASSES PUT ERROR:",
-      error
-    );
+    console.error("ADMIN CLASSES PUT ERROR:", error);
 
     return NextResponse.json(
       {
@@ -322,10 +373,7 @@ export async function DELETE(request: Request) {
       message: "کلاس با موفقیت حذف شد.",
     });
   } catch (error) {
-    console.error(
-      "ADMIN CLASSES DELETE ERROR:",
-      error
-    );
+    console.error("ADMIN CLASSES DELETE ERROR:", error);
 
     return NextResponse.json(
       {

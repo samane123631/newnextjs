@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 
+
+
 type User = {
   id: number;
   firstName: string;
@@ -15,6 +17,11 @@ type User = {
   phoneVerified: boolean;
   role: string;
   createdAt: string;
+
+  hasReceipt: boolean;
+  receiptPath: string | null;
+  receiptId: number | null;
+  receiptClassId: number | null;
 };
 
 type FormData = {
@@ -49,9 +56,12 @@ export default function AdminUsersPage() {
   const [loading, setLoading] = useState(true);
 
   const [showForm, setShowForm] = useState(false);
-  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [editingUser, setEditingUser] =
+    useState<User | null>(null);
 
-  const [form, setForm] = useState<FormData>(emptyForm);
+  const [form, setForm] =
+    useState<FormData>(emptyForm);
+
   const [saving, setSaving] = useState(false);
 
   // =========================
@@ -60,23 +70,30 @@ export default function AdminUsersPage() {
 
   async function loadUsers() {
     try {
-      const response = await fetch("/api/auth/admin/users", {
-        method: "GET",
-        credentials: "include",
-        cache: "no-store",
-      });
+      const response = await fetch(
+        "/api/auth/admin/users",
+        {
+          method: "GET",
+          credentials: "include",
+          cache: "no-store",
+        }
+      );
 
       const data = await response.json();
 
       if (!response.ok || !data.success) {
         throw new Error(
-          data.message || "خطا در دریافت کاربران"
+          data.message ||
+            "خطا در دریافت کاربران"
         );
       }
 
       setUsers(data.users);
     } catch (error) {
-      console.error("Load users error:", error);
+      console.error(
+        "Load users error:",
+        error
+      );
 
       alert(
         error instanceof Error
@@ -87,7 +104,7 @@ export default function AdminUsersPage() {
   }
 
   // =========================
-  // بارگذاری اولیه کاربران
+  // بارگذاری اولیه
   // =========================
 
   useEffect(() => {
@@ -199,12 +216,40 @@ export default function AdminUsersPage() {
       level: user.level,
       phone: user.phone || "",
       role: user.role,
-      phoneVerified: user.phoneVerified,
+      phoneVerified:
+        user.phoneVerified,
     });
 
     setShowForm(true);
   }
 
+  // =========================
+  // View Receipt
+  // =========================
+
+async function handleViewReceipt(user: User) {
+  try {
+    const response = await fetch(
+      `/api/auth/admin/payment/receipt?userId=${user.id}`
+    );
+
+    const data = await response.json();
+
+    if (!data.success) {
+      alert(data.message || "Receipt not found");
+      return;
+    }
+
+    window.open(
+      data.receiptUrl,
+      "_blank"
+    );
+
+  } catch (error) {
+    console.error(error);
+    alert("خطا در باز کردن فیش");
+  }
+}
   // =========================
   // Save User
   // =========================
@@ -233,7 +278,8 @@ export default function AdminUsersPage() {
         {
           method,
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type":
+              "application/json",
           },
           credentials: "include",
           body: JSON.stringify(body),
@@ -279,10 +325,13 @@ export default function AdminUsersPage() {
   // Delete User
   // =========================
 
-  async function handleDelete(user: User) {
-    const confirmed = window.confirm(
-      `آیا مطمئن هستید که می‌خواهید کاربر "${user.firstName} ${user.lastName}" را حذف کنید؟`
-    );
+  async function handleDelete(
+    user: User
+  ) {
+    const confirmed =
+      window.confirm(
+        `آیا مطمئن هستید که می‌خواهید کاربر "${user.firstName} ${user.lastName}" را حذف کنید؟`
+      );
 
     if (!confirmed) {
       return;
@@ -294,7 +343,8 @@ export default function AdminUsersPage() {
         {
           method: "DELETE",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type":
+              "application/json",
           },
           credentials: "include",
           body: JSON.stringify({
@@ -354,8 +404,6 @@ export default function AdminUsersPage() {
 
           <div className="flex flex-wrap gap-3">
 
-            {/* Add User */}
-
             <button
               type="button"
               onClick={handleAdd}
@@ -364,12 +412,12 @@ export default function AdminUsersPage() {
               + Add User
             </button>
 
-            {/* Dashboard */}
-
             <button
               type="button"
               onClick={() =>
-                router.push(`/${locale}/admin`)
+                router.push(
+                  `/${locale}/admin`
+                )
               }
               className="rounded-lg bg-gray-700 px-5 py-2.5 font-semibold text-white transition hover:bg-gray-800"
             >
@@ -411,8 +459,6 @@ export default function AdminUsersPage() {
               className="grid gap-5 sm:grid-cols-2"
             >
 
-              {/* First Name */}
-
               <div>
                 <label className="mb-1 block font-medium text-gray-700">
                   First Name
@@ -426,8 +472,6 @@ export default function AdminUsersPage() {
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
               </div>
-
-              {/* Last Name */}
 
               <div>
                 <label className="mb-1 block font-medium text-gray-700">
@@ -443,8 +487,6 @@ export default function AdminUsersPage() {
                 />
               </div>
 
-              {/* Email */}
-
               <div>
                 <label className="mb-1 block font-medium text-gray-700">
                   Email
@@ -459,8 +501,6 @@ export default function AdminUsersPage() {
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
               </div>
-
-              {/* Password */}
 
               <div>
                 <label className="mb-1 block font-medium text-gray-700">
@@ -483,8 +523,6 @@ export default function AdminUsersPage() {
                 />
               </div>
 
-              {/* Birth Date */}
-
               <div>
                 <label className="mb-1 block font-medium text-gray-700">
                   Birth Date
@@ -499,8 +537,6 @@ export default function AdminUsersPage() {
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
               </div>
-
-              {/* Level */}
 
               <div>
                 <label className="mb-1 block font-medium text-gray-700">
@@ -517,8 +553,6 @@ export default function AdminUsersPage() {
                 />
               </div>
 
-              {/* Phone */}
-
               <div>
                 <label className="mb-1 block font-medium text-gray-700">
                   Phone
@@ -531,8 +565,6 @@ export default function AdminUsersPage() {
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
               </div>
-
-              {/* Role */}
 
               <div>
                 <label className="mb-1 block font-medium text-gray-700">
@@ -555,15 +587,15 @@ export default function AdminUsersPage() {
                 </select>
               </div>
 
-              {/* Phone Verified */}
-
               <div className="flex items-center gap-3 sm:col-span-2">
 
                 <input
                   id="phoneVerified"
                   name="phoneVerified"
                   type="checkbox"
-                  checked={form.phoneVerified}
+                  checked={
+                    form.phoneVerified
+                  }
                   onChange={handleChange}
                   className="h-5 w-5"
                 />
@@ -576,8 +608,6 @@ export default function AdminUsersPage() {
                 </label>
 
               </div>
-
-              {/* Buttons */}
 
               <div className="flex flex-wrap gap-3 sm:col-span-2">
 
@@ -623,11 +653,9 @@ export default function AdminUsersPage() {
 
         ) : (
 
-          /* Users Table */
-
           <div className="overflow-x-auto rounded-xl bg-white shadow-md">
 
-            <table className="min-w-[1200px] w-full text-left">
+            <table className="min-w-[1300px] w-full text-left">
 
               <thead className="bg-gray-100">
 
@@ -662,6 +690,10 @@ export default function AdminUsersPage() {
                   </th>
 
                   <th className="px-4 py-4">
+                    Receipt
+                  </th>
+
+                  <th className="px-4 py-4">
                     Created
                   </th>
 
@@ -680,7 +712,7 @@ export default function AdminUsersPage() {
                   <tr>
 
                     <td
-                      colSpan={9}
+                      colSpan={10}
                       className="px-4 py-10 text-center text-gray-500"
                     >
                       No users found.
@@ -719,21 +751,51 @@ export default function AdminUsersPage() {
                       </td>
 
                       <td className="px-4 py-4">
+
                         <span
                           className={
-                            user.role === "ADMIN"
+                            user.role ===
+                            "ADMIN"
                               ? "font-bold text-red-600"
                               : "text-gray-700"
                           }
                         >
                           {user.role}
                         </span>
+
                       </td>
 
                       <td className="px-4 py-4">
                         {user.phoneVerified
                           ? "✓"
                           : "—"}
+                      </td>
+
+                      {/* Receipt */}
+
+                      <td className="px-4 py-4">
+
+                        {user.hasReceipt ? (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleViewReceipt(
+                                user
+                              )
+                            }
+                            className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+                          >
+                            View Receipt
+                          </button>
+
+                        ) : (
+
+                          <span className="text-sm font-medium text-gray-400">
+                            No Receipt
+                          </span>
+
+                        )}
+
                       </td>
 
                       <td className="px-4 py-4">
@@ -749,7 +811,9 @@ export default function AdminUsersPage() {
                           <button
                             type="button"
                             onClick={() =>
-                              handleEdit(user)
+                              handleEdit(
+                                user
+                              )
                             }
                             className="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
                           >
@@ -759,7 +823,9 @@ export default function AdminUsersPage() {
                           <button
                             type="button"
                             onClick={() =>
-                              handleDelete(user)
+                              handleDelete(
+                                user
+                              )
                             }
                             className="rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-700"
                           >

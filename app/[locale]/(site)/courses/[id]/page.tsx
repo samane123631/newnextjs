@@ -195,22 +195,25 @@ export default async function CourseDetailsPage({ params }: Props) {
     return `${weeks} weeks`;
   }
 
-  const registerUrl = `/${routeLocale}/courses/${classItem.id}/register`;
+  const registerUrl =
+    `/${routeLocale}/courses/${classItem.id}/register`;
 
   return (
-    <main className="min-h-screen bg-gray-50 px-6 py-12">
-      <div className="mx-auto max-w-3xl">
-        <div className="rounded-2xl bg-white p-8 shadow-lg">
+    <main className="min-h-screen bg-gray-50 px-4 py-12">
+      <div className="flex min-h-[80vh] w-full items-center justify-center">
+        <div className="w-full max-w-2xl rounded-2xl border border-gray-200 bg-white p-8 shadow-xl ring-1 ring-gray-200">
 
-          <h1 className="text-3xl font-bold text-blue-700">
-            {title}
-          </h1>
+          <div className="mb-8 text-center">
+            <h1 className="text-3xl font-bold text-blue-700">
+              {title}
+            </h1>
 
-          <p className="mt-4 text-gray-600">
-            {description}
-          </p>
+            <p className="mt-4 text-gray-600">
+              {description}
+            </p>
+          </div>
 
-          <div className="mt-8 space-y-4 text-gray-700">
+          <div className="space-y-5 text-gray-700">
 
             <div>
               🕒{" "}
@@ -229,6 +232,12 @@ export default async function CourseDetailsPage({ params }: Props) {
             </div>
 
             <div>
+              👨‍🏫{" "}
+              <strong>Teacher:</strong>{" "}
+              {classItem.teacher || "-"}
+            </div>
+
+            <div>
               📍{" "}
               <strong>{t("format")}:</strong>{" "}
               {getFormat(classItem.format)}
@@ -240,11 +249,21 @@ export default async function CourseDetailsPage({ params }: Props) {
               {classItem.maxStudents}
             </div>
 
+            <div>
+              💰{" "}
+              <strong>Price:</strong>{" "}
+              {classItem.price !== null &&
+              classItem.price !== undefined
+                ? classItem.price.toLocaleString()
+                : "-"}{" "}
+              {classItem.currency || ""}
+            </div>
+
           </div>
 
           <Link
             href={registerUrl}
-            className="mt-8 block w-full rounded-lg bg-blue-700 py-3 text-center text-white transition hover:bg-blue-800"
+            className="mt-8 block w-full rounded-xl bg-blue-700 p-3.5 text-center font-bold text-white shadow-md transition hover:bg-blue-800 hover:shadow-lg"
           >
             {t("register")}
           </Link>

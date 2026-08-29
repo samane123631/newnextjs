@@ -12,6 +12,7 @@
     "@google/genai": "^2.18.0",
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
+    "@supabase/supabase-js": "^2.112.4",
     "bcryptjs": "^3.0.3",
     "dns2": "^3.1.1",
     "framer-motion": "^12.43.0",

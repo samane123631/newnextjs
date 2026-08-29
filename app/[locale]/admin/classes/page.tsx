@@ -24,6 +24,9 @@ type ClassItem = {
   endDate: string | null;
 
   maxStudents: number;
+
+  price: number | null;
+  currency: string | null;
 };
 
 type FormData = {
@@ -44,6 +47,9 @@ type FormData = {
   endDate: string;
 
   maxStudents: number;
+
+  price: string;
+  currency: string;
 };
 
 const emptyForm: FormData = {
@@ -64,6 +70,9 @@ const emptyForm: FormData = {
   endDate: "",
 
   maxStudents: 7,
+
+  price: "",
+  currency: "EUR",
 };
 
 const days = [
@@ -225,10 +234,14 @@ export default function AdminClassesPage() {
 
   function handleAdd() {
     setEditingId(null);
+
     setForm({
       ...emptyForm,
       maxStudents: 7,
+      price: "",
+      currency: "EUR",
     });
+
     setShowForm(true);
   }
 
@@ -285,6 +298,15 @@ export default function AdminClassesPage() {
         typeof item.maxStudents === "number"
           ? item.maxStudents
           : 7,
+
+      price:
+        item.price !== null &&
+        item.price !== undefined
+          ? String(item.price)
+          : "",
+
+      currency:
+        item.currency ?? "EUR",
     });
 
     setShowForm(true);
@@ -293,9 +315,12 @@ export default function AdminClassesPage() {
   function handleCancel() {
     setShowForm(false);
     setEditingId(null);
+
     setForm({
       ...emptyForm,
       maxStudents: 7,
+      price: "",
+      currency: "EUR",
     });
   }
 
@@ -326,6 +351,20 @@ export default function AdminClassesPage() {
       alert(
         "ظرفیت کلاس باید بین 1 تا 7 نفر باشد."
       );
+      return;
+    }
+
+    const parsedPrice =
+      form.price.trim() === ""
+        ? null
+        : Number(form.price);
+
+    if (
+      parsedPrice !== null &&
+      (!Number.isFinite(parsedPrice) ||
+        parsedPrice < 0)
+    ) {
+      alert("مبلغ کلاس معتبر نیست.");
       return;
     }
 
@@ -383,6 +422,12 @@ export default function AdminClassesPage() {
 
         maxStudents:
           form.maxStudents,
+
+        price:
+          parsedPrice,
+
+        currency:
+          form.currency.trim().toUpperCase(),
       };
 
       const response = await fetch(
@@ -688,7 +733,6 @@ export default function AdminClassesPage() {
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
 
                   {days.map((day) => {
-
                     const selected =
                       form.day.includes(
                         day.value
@@ -723,7 +767,6 @@ export default function AdminClassesPage() {
 
                       </label>
                     );
-
                   })}
 
                 </div>
@@ -740,7 +783,6 @@ export default function AdminClassesPage() {
               {/* FORMAT */}
 
               <div>
-
                 <label className="mb-2 block font-semibold text-gray-700">
                   Format
                 </label>
@@ -765,13 +807,11 @@ export default function AdminClassesPage() {
                   </option>
 
                 </select>
-
               </div>
 
               {/* MAX STUDENTS */}
 
               <div>
-
                 <label className="mb-2 block font-semibold text-gray-700">
                   Maximum Students
                 </label>
@@ -802,13 +842,65 @@ export default function AdminClassesPage() {
                 <p className="mt-2 text-sm text-gray-500">
                   Maximum allowed capacity: 7 students
                 </p>
+              </div>
 
+              {/* PRICE */}
+
+              <div>
+                <label className="mb-2 block font-semibold text-gray-700">
+                  Price
+                </label>
+
+                <input
+                  type="number"
+                  name="price"
+                  min={0}
+                  step="0.01"
+                  value={form.price}
+                  onChange={handleChange}
+                  placeholder="100"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+                />
+              </div>
+
+              {/* CURRENCY */}
+
+              <div>
+                <label className="mb-2 block font-semibold text-gray-700">
+                  Currency
+                </label>
+
+                <select
+                  name="currency"
+                  value={form.currency}
+                  onChange={handleChange}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+                >
+                  <option value="EUR">
+                    EUR — Euro
+                  </option>
+
+                  <option value="USD">
+                    USD — US Dollar
+                  </option>
+
+                  <option value="GBP">
+                    GBP — British Pound
+                  </option>
+
+                  <option value="IRR">
+                    IRR — Iranian Rial
+                  </option>
+
+                  <option value="AZN">
+                    AZN — Azerbaijani Manat
+                  </option>
+                </select>
               </div>
 
               {/* START TIME */}
 
               <div>
-
                 <label className="mb-2 block font-semibold text-gray-700">
                   Start Time
                 </label>
@@ -820,13 +912,11 @@ export default function AdminClassesPage() {
                   onChange={handleChange}
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
-
               </div>
 
               {/* END TIME */}
 
               <div>
-
                 <label className="mb-2 block font-semibold text-gray-700">
                   End Time
                 </label>
@@ -838,13 +928,11 @@ export default function AdminClassesPage() {
                   onChange={handleChange}
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
-
               </div>
 
               {/* START DATE */}
 
               <div>
-
                 <label className="mb-2 block font-semibold text-gray-700">
                   Start Date
                 </label>
@@ -856,13 +944,11 @@ export default function AdminClassesPage() {
                   onChange={handleChange}
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
-
               </div>
 
               {/* END DATE */}
 
               <div>
-
                 <label className="mb-2 block font-semibold text-gray-700">
                   End Date
                 </label>
@@ -874,7 +960,6 @@ export default function AdminClassesPage() {
                   onChange={handleChange}
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
-
               </div>
 
               {/* BUTTONS */}
@@ -911,7 +996,7 @@ export default function AdminClassesPage() {
 
         <div className="overflow-x-auto rounded-xl bg-white shadow-md">
 
-          <table className="min-w-[1450px] w-full text-left">
+          <table className="min-w-[1600px] w-full text-left">
 
             <thead className="bg-gray-100">
 
@@ -954,6 +1039,14 @@ export default function AdminClassesPage() {
                 </th>
 
                 <th className="px-4 py-4">
+                  Price
+                </th>
+
+                <th className="px-4 py-4">
+                  Currency
+                </th>
+
+                <th className="px-4 py-4">
                   Actions
                 </th>
 
@@ -968,7 +1061,7 @@ export default function AdminClassesPage() {
                 <tr>
 
                   <td
-                    colSpan={10}
+                    colSpan={12}
                     className="px-4 py-10 text-center text-gray-500"
                   >
                     Loading classes...
@@ -981,7 +1074,7 @@ export default function AdminClassesPage() {
                 <tr>
 
                   <td
-                    colSpan={10}
+                    colSpan={12}
                     className="px-4 py-10 text-center text-gray-500"
                   >
                     No classes found.
@@ -1040,6 +1133,17 @@ export default function AdminClassesPage() {
 
                     <td className="px-4 py-4 font-semibold">
                       {item.maxStudents ?? 7}
+                    </td>
+
+                    <td className="px-4 py-4 font-semibold">
+                      {item.price !== null &&
+                      item.price !== undefined
+                        ? item.price
+                        : "-"}
+                    </td>
+
+                    <td className="px-4 py-4">
+                      {item.currency ?? "-"}
                     </td>
 
                     <td className="px-4 py-4">

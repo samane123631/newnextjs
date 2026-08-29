@@ -33,7 +33,6 @@ export default function HeroSlider() {
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // حرکت خودکار اسلایدها
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide(
@@ -44,7 +43,6 @@ export default function HeroSlider() {
     return () => clearInterval(timer);
   }, []);
 
-  // اسلاید قبلی
   function previousSlide() {
     setCurrentSlide(
       (prev) =>
@@ -52,16 +50,13 @@ export default function HeroSlider() {
     );
   }
 
-  // اسلاید بعدی
   function nextSlide() {
     setCurrentSlide(
       (prev) => (prev + 1) % slides.length
     );
   }
 
-  // عملکرد دکمه اسلاید
   function handleSlideButton(path: string) {
-    // باز کردن MegaMenu
     if (path === "courses") {
       window.dispatchEvent(
         new Event("open-courses-mega-menu")
@@ -69,10 +64,7 @@ export default function HeroSlider() {
       return;
     }
 
-    // رفتن به صفحه
-    window.location.assign(
-      `/${locale}${path}`
-    );
+    window.location.assign(`/${locale}${path}`);
   }
 
   return (
@@ -83,28 +75,52 @@ export default function HeroSlider() {
         w-full
         justify-center
         px-4
-        pb-8
-        pt-10
+        pb-0
+        pt-0
         sm:px-6
-        sm:pb-10
-        sm:pt-12
+        sm:pb-0
       "
     >
       <div
         className="
           relative
-          h-[220px]
+          h-[165px]
           w-full
           max-w-5xl
           overflow-hidden
           rounded-xl
-          bg-gray-200
+          bg-white/5
           shadow-[0_12px_35px_rgba(0,0,0,0.16)]
-          sm:h-[280px]
+          sm:h-[205px]
           sm:rounded-2xl
-          lg:h-[330px]
+          lg:h-[240px]
         "
       >
+        {/* پس‌زمینه اصلی */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/image/a.jpg.jpg"
+            alt=""
+            fill
+            sizes="100vw"
+            className="
+              object-cover
+              object-center
+            "
+          />
+        </div>
+
+        {/* لایه شیشه‌ای */}
+        <div
+          className="
+            absolute
+            inset-0
+            z-[1]
+            bg-white/5
+            backdrop-blur-[2px]
+          "
+        />
+
         {/* Slides */}
         {slides.map((slide, index) => (
           <div
@@ -121,7 +137,7 @@ export default function HeroSlider() {
               }
             `}
           >
-            {/* عکس */}
+            {/* تصویر اسلاید */}
             <Image
               src={slide.image}
               alt={t(`${slide.title}.title`)}
@@ -132,7 +148,21 @@ export default function HeroSlider() {
                 (max-width: 1024px) 90vw,
                 1024px
               "
-              className="object-cover object-center"
+              className="
+                object-cover
+                object-center
+                opacity-50
+              "
+            />
+
+            {/* لایه شیشه‌ای */}
+            <div
+              className="
+                absolute
+                inset-0
+                bg-white/5
+                backdrop-blur-[1px]
+              "
             />
 
             {/* لایه مورب */}
@@ -143,19 +173,19 @@ export default function HeroSlider() {
                 left-0
                 z-10
                 w-[58%]
-                bg-black/55
+                bg-black/35
                 [clip-path:polygon(0_0,78%_0,100%_100%,0_100%)]
               "
             />
 
-            {/* سایه نرم روی تصویر */}
+            {/* سایه نرم */}
             <div
               className="
                 absolute
                 inset-0
                 z-[5]
                 bg-gradient-to-r
-                from-black/20
+                from-black/15
                 via-transparent
                 to-transparent
               "
@@ -180,7 +210,6 @@ export default function HeroSlider() {
               "
             >
               <div className="max-w-md">
-                {/* عنوان */}
                 <h2
                   className="
                     mb-2
@@ -195,7 +224,6 @@ export default function HeroSlider() {
                   {t(`${slide.title}.title`)}
                 </h2>
 
-                {/* توضیحات */}
                 <p
                   className="
                     mb-4
@@ -211,7 +239,6 @@ export default function HeroSlider() {
                   {t(`${slide.title}.description`)}
                 </p>
 
-                {/* دکمه */}
                 <button
                   type="button"
                   onClick={() => {
@@ -260,12 +287,12 @@ export default function HeroSlider() {
             items-center
             justify-center
             rounded-full
-            bg-black/30
+            bg-black/25
             text-2xl
             text-white
             backdrop-blur-sm
             transition
-            hover:bg-black/55
+            hover:bg-black/50
             sm:h-10
             sm:w-10
           "
@@ -290,12 +317,12 @@ export default function HeroSlider() {
             items-center
             justify-center
             rounded-full
-            bg-black/30
+            bg-black/25
             text-2xl
             text-white
             backdrop-blur-sm
             transition
-            hover:bg-black/55
+            hover:bg-black/50
             sm:h-10
             sm:w-10
           "
@@ -307,7 +334,7 @@ export default function HeroSlider() {
         <div
           className="
             absolute
-            bottom-4
+            bottom-3
             left-1/2
             z-30
             flex

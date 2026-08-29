@@ -106,7 +106,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={toggleMenu}
-          className="rounded-lg border border-gray-300 px-3 py-2 text-xl text-gray-700"
+          className="rounded-lg border border-gray-300 bg-white/90 px-3 py-2 text-xl font-bold text-gray-800 shadow-sm backdrop-blur-sm"
           aria-label="Menu"
           aria-expanded={isOpen}
         >
@@ -114,14 +114,14 @@ export default function Navbar() {
         </button>
 
         {isOpen && (
-          <div className="absolute left-4 right-4 top-20 z-50 rounded-xl border border-gray-200 bg-white p-4 shadow-lg">
-            <div className="flex flex-col gap-4">
+          <div className="absolute left-4 right-4 top-20 z-50 rounded-2xl border border-gray-200 bg-white/95 p-5 shadow-xl backdrop-blur-md">
+            <div className="flex flex-col gap-5">
 
               {/* Home */}
               <Link
                 href={`/${locale}`}
                 onClick={() => setIsOpen(false)}
-                className="font-medium text-gray-700"
+                className="font-semibold text-gray-900 transition hover:text-blue-700"
               >
                 {t("home")}
               </Link>
@@ -131,7 +131,7 @@ export default function Navbar() {
                 <button
                   type="button"
                   onClick={toggleCourses}
-                  className="flex w-full items-center justify-between font-medium text-gray-700"
+                  className="flex w-full items-center justify-between font-semibold text-gray-900 transition hover:text-blue-700"
                 >
                   <span>
                     {locale === "fa"
@@ -141,18 +141,18 @@ export default function Navbar() {
                         : "Kurse"}
                   </span>
 
-                  <span>
+                  <span className="text-lg font-bold text-blue-700">
                     {coursesOpen ? "−" : "+"}
                   </span>
                 </button>
 
                 {coursesOpen && (
-                  <div className="mt-3 flex flex-col gap-3 border-l-2 border-blue-200 pl-4">
+                  <div className="mt-4 flex flex-col gap-3 border-l-2 border-blue-200 pl-4">
 
                     {courses.map((course) => (
                       <div
                         key={course}
-                        className="text-sm text-gray-600"
+                        className="text-sm font-semibold text-gray-800"
                       >
                         {course}
                       </div>
@@ -162,7 +162,7 @@ export default function Navbar() {
                     <Link
                       href={`/${locale}/courses`}
                       onClick={() => setIsOpen(false)}
-                      className="text-sm font-medium text-blue-700 hover:text-blue-900"
+                      className="text-sm font-bold text-blue-700 transition hover:text-blue-900"
                     >
                       {moreLabel}
                     </Link>
@@ -175,7 +175,7 @@ export default function Navbar() {
               <Link
                 href={`/${locale}/pruefungen`}
                 onClick={() => setIsOpen(false)}
-                className="font-medium text-gray-700"
+                className="font-semibold text-gray-900 transition hover:text-blue-700"
               >
                 {t("exams")}
               </Link>
@@ -184,7 +184,7 @@ export default function Navbar() {
               <Link
                 href={`/${locale}/ueber-uns`}
                 onClick={() => setIsOpen(false)}
-                className="font-medium text-gray-700"
+                className="font-semibold text-gray-900 transition hover:text-blue-700"
               >
                 {t("about")}
               </Link>
@@ -193,7 +193,7 @@ export default function Navbar() {
               <Link
                 href={`/${locale}/blog`}
                 onClick={() => setIsOpen(false)}
-                className="font-medium text-gray-700"
+                className="font-semibold text-gray-900 transition hover:text-blue-700"
               >
                 {t("blog")}
               </Link>
@@ -202,7 +202,7 @@ export default function Navbar() {
               <Link
                 href={`/${locale}/news`}
                 onClick={() => setIsOpen(false)}
-                className="font-medium text-gray-700"
+                className="font-semibold text-gray-900 transition hover:text-blue-700"
               >
                 {newsLabel}
               </Link>
@@ -211,7 +211,7 @@ export default function Navbar() {
               <Link
                 href={`/${locale}/contact`}
                 onClick={() => setIsOpen(false)}
-                className="font-medium text-gray-700"
+                className="font-semibold text-gray-900 transition hover:text-blue-700"
               >
                 {t("contact")}
               </Link>
@@ -220,7 +220,7 @@ export default function Navbar() {
               <Link
                 href={`/${locale}/anmeldung`}
                 onClick={() => setIsOpen(false)}
-                className="font-medium text-gray-700"
+                className="font-semibold text-gray-900 transition hover:text-blue-700"
               >
                 {t("register")}
               </Link>
