@@ -114,7 +114,7 @@ export default function Navbar() {
         </button>
 
         {isOpen && (
-          <div className="absolute left-4 right-4 top-20 z-50 rounded-2xl border border-gray-200 bg-white/95 p-5 shadow-xl backdrop-blur-md">
+          <div className="absolute left-4 right-4 top-20 z-50 rounded-2xl border border-gray-200 bg-white p-5 shadow-xl">
             <div className="flex flex-col gap-5">
 
               {/* Home */}
