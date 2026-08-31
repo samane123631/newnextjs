@@ -20,6 +20,10 @@ export async function GET() {
       {
         success: false,
         message: "خطا در دریافت کلاس‌ها.",
+        error:
+          error instanceof Error
+            ? error.message
+            : "Unknown error",
       },
       {
         status: 500,
