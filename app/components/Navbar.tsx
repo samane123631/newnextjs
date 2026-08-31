@@ -106,8 +106,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={toggleMenu}
-          className="rounded-lg border border-gray-300 bg-white/90 px-3 py-2 text-xl font-bold text-gray-800 shadow-sm backdrop-blur-sm"
-          aria-label="Menu"
+className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-xl font-bold text-gray-800 shadow-sm"          aria-label="Menu"
           aria-expanded={isOpen}
         >
           ☰
