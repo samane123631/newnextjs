@@ -76,7 +76,6 @@ export default function Navbar() {
           {t("blog")}
         </Link>
 
-        {/* News */}
         <Link
           href={`/${locale}/news`}
           className="whitespace-nowrap font-medium text-gray-700 transition hover:text-blue-700"
@@ -84,7 +83,6 @@ export default function Navbar() {
           {newsLabel}
         </Link>
 
-        {/* Contact */}
         <Link
           href={`/${locale}/contact`}
           className="whitespace-nowrap font-medium text-gray-700 transition hover:text-blue-700"
@@ -92,7 +90,6 @@ export default function Navbar() {
           {t("contact")}
         </Link>
 
-        {/* Register */}
         <Link
           href={`/${locale}/anmeldung`}
           className="whitespace-nowrap font-medium text-gray-700 transition hover:text-blue-700"
@@ -102,19 +99,31 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile Navbar */}
-      <div className="relative lg:hidden">
+      <div className="relative z-[99999] lg:hidden">
         <button
           type="button"
           onClick={toggleMenu}
-className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-xl font-bold text-gray-800 shadow-sm"          aria-label="Menu"
+          className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-xl font-bold text-gray-800 shadow-sm"
+          aria-label="Menu"
           aria-expanded={isOpen}
         >
           ☰
         </button>
 
         {isOpen && (
-          <div className="absolute left-4 right-4 top-20 z-50 rounded-2xl border border-gray-200 bg-white p-5 shadow-xl">
-            <div className="flex flex-col gap-5">
+          <div
+            className="fixed left-4 right-4 top-20 z-[99999] rounded-2xl border border-gray-200 bg-white p-5 shadow-2xl"
+            style={{
+              background: "#ffffff",
+              backgroundColor: "#ffffff",
+              backgroundImage: "none",
+              opacity: 1,
+              backdropFilter: "none",
+              WebkitBackdropFilter: "none",
+              isolation: "isolate",
+            }}
+          >
+            <div className="flex flex-col gap-5 bg-white">
 
               {/* Home */}
               <Link
@@ -147,7 +156,6 @@ className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-xl font-bol
 
                 {coursesOpen && (
                   <div className="mt-4 flex flex-col gap-3 border-l-2 border-blue-200 pl-4">
-
                     {courses.map((course) => (
                       <div
                         key={course}
@@ -157,7 +165,6 @@ className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-xl font-bol
                       </div>
                     ))}
 
-                    {/* More Information */}
                     <Link
                       href={`/${locale}/courses`}
                       onClick={() => setIsOpen(false)}
@@ -165,7 +172,6 @@ className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-xl font-bol
                     >
                       {moreLabel}
                     </Link>
-
                   </div>
                 )}
               </div>

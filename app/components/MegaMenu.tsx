@@ -185,37 +185,31 @@ export default function MegaMenu() {
         de: "Montag",
         en: "Monday",
       },
-
       Tuesday: {
         fa: "سه‌شنبه",
         de: "Dienstag",
         en: "Tuesday",
       },
-
       Wednesday: {
         fa: "چهارشنبه",
         de: "Mittwoch",
         en: "Wednesday",
       },
-
       Thursday: {
         fa: "پنجشنبه",
         de: "Donnerstag",
         en: "Thursday",
       },
-
       Friday: {
         fa: "جمعه",
         de: "Freitag",
         en: "Friday",
       },
-
       Saturday: {
         fa: "شنبه",
         de: "Samstag",
         en: "Saturday",
       },
-
       Sunday: {
         fa: "یکشنبه",
         de: "Sonntag",
@@ -320,7 +314,7 @@ export default function MegaMenu() {
     >
       <button
         type="button"
-        className="font-medium hover:text-blue-700"
+        className="font-medium text-gray-700 transition hover:text-blue-700"
       >
         {t("title")}
       </button>
@@ -340,10 +334,18 @@ export default function MegaMenu() {
               opacity: 0,
               y: 15,
             }}
-            className="absolute left-0 top-10 z-50 w-[850px] rounded-xl bg-white p-8 shadow-2xl"
+            className="absolute left-0 top-10 z-[9999] w-[850px] rounded-xl border border-gray-200 bg-white p-8 shadow-2xl"
+            style={{
+              backgroundColor: "#ffffff",
+              backgroundImage: "none",
+              opacity: 1,
+              backdropFilter: "none",
+              WebkitBackdropFilter: "none",
+            }}
           >
             <div className="grid grid-cols-3 gap-8">
 
+              {/* Courses */}
               <div>
                 <h3 className="mb-4 font-bold text-blue-700">
                   {t("courses")}
@@ -364,7 +366,7 @@ export default function MegaMenu() {
                       onMouseEnter={() =>
                         setActive(index)
                       }
-                      className="cursor-pointer py-2 hover:text-blue-700"
+                      className="cursor-pointer py-2 text-gray-800 transition hover:text-blue-700"
                     >
                       {getTitle(item)}
                     </div>
@@ -372,15 +374,21 @@ export default function MegaMenu() {
                 )}
               </div>
 
-              <div className="col-span-2 rounded-xl bg-gray-50 p-6">
-
+              {/* Details */}
+              <div
+                className="col-span-2 rounded-xl bg-gray-50 p-6"
+                style={{
+                  backgroundColor: "#f9fafb",
+                  backgroundImage: "none",
+                }}
+              >
                 {activeClass ? (
                   <>
                     <h3 className="text-xl font-bold text-blue-700">
                       {getTitle(activeClass)}
                     </h3>
 
-                    <ul className="mt-4 space-y-3">
+                    <ul className="mt-4 space-y-3 text-gray-800">
 
                       <li>
                         👨‍🏫{" "}
@@ -413,7 +421,7 @@ export default function MegaMenu() {
 
                     <Link
                       href={`/${locale}/courses`}
-                      className="mt-5 block rounded-lg bg-blue-700 py-2 text-center text-white"
+                      className="mt-5 block rounded-lg bg-blue-700 py-2 text-center text-white transition hover:bg-blue-800"
                     >
                       {t("more")}
                     </Link>
@@ -423,8 +431,8 @@ export default function MegaMenu() {
                     {t("noClassToDisplay")}
                   </div>
                 )}
-
               </div>
+
             </div>
           </motion.div>
         )}
