@@ -19,6 +19,11 @@ export default function VerifyPhonePage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  // کد موقت برای نمایش روی صفحه
+  const [verificationCode] = useState(
+    searchParams.get("code") || ""
+  );
+
   async function handleVerify() {
     if (!userId) {
       setMessage(t("userNotFound"));
@@ -55,7 +60,6 @@ export default function VerifyPhonePage() {
       setSuccess(true);
       setMessage(t("success"));
 
-      // رفتن به پروفایل همان زبان
       setTimeout(() => {
         router.push(`/${locale}/profile`);
       }, 1000);
@@ -70,16 +74,37 @@ export default function VerifyPhonePage() {
   return (
     <main
       dir={locale === "fa" ? "rtl" : "ltr"}
-      className="min-h-screen flex items-center justify-center px-4"
+      className="flex min-h-screen items-center justify-center px-4"
     >
       <div className="w-full max-w-md text-center">
-        <h1 className="text-2xl font-bold mb-4">
+
+        <h1 className="mb-4 text-2xl font-bold">
           {t("title")}
         </h1>
 
         <p className="mb-6 text-gray-600">
           {t("subtitle")}
         </p>
+
+        {/* نمایش کد تستی */}
+        {verificationCode && (
+          <div className="mb-6 rounded-xl border-2 border-blue-200 bg-blue-50 p-5">
+            <p className="mb-2 text-sm font-semibold text-gray-700">
+              کد تأیید شما:
+            </p>
+
+            <p
+              dir="ltr"
+              className="text-3xl font-bold tracking-[0.4em] text-blue-700"
+            >
+              {verificationCode}
+            </p>
+
+            <p className="mt-2 text-xs text-gray-500">
+              این کد فعلاً برای تست روی صفحه نمایش داده می‌شود.
+            </p>
+          </div>
+        )}
 
         <input
           type="text"
@@ -90,7 +115,7 @@ export default function VerifyPhonePage() {
             setCode(e.target.value.replace(/\D/g, ""))
           }
           placeholder={t("codePlaceholder")}
-          className="w-full border rounded-lg px-4 py-3 text-center text-xl tracking-[0.5em]"
+          className="w-full rounded-lg border px-4 py-3 text-center text-xl tracking-[0.5em]"
           disabled={loading || success}
         />
 
@@ -98,7 +123,7 @@ export default function VerifyPhonePage() {
           type="button"
           onClick={handleVerify}
           disabled={loading || success}
-          className="mt-4 w-full rounded-lg bg-black text-white py-3 disabled:opacity-50"
+          className="mt-4 w-full rounded-lg bg-black py-3 text-white disabled:opacity-50"
         >
           {loading ? t("verifying") : t("verify")}
         </button>

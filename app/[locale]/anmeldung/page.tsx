@@ -54,12 +54,16 @@ export default function Anmeldung() {
         return;
       }
 
+      if (!result.verificationCode) {
+        setMessage("Verification code not found.");
+        return;
+      }
+
       router.push(
-        `/${locale}/verify-phone?userId=${result.userId}`
+        `/${locale}/verify-phone?userId=${result.userId}&code=${result.verificationCode}`
       );
     } catch (error) {
       console.error("Registration error:", error);
-
       setMessage("خطایی در ارتباط با سرور رخ داد.");
     } finally {
       setLoading(false);
@@ -70,25 +74,10 @@ export default function Anmeldung() {
     <main className="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-100 px-4 py-10">
       <div className="flex w-full items-center justify-center">
         <form
-  ref={formRef}
-  onSubmit={handleSubmit}
-  className="
-    flex
-    w-full
-    max-w-md
-    flex-col
-    gap-5
-    rounded-2xl
-    border
-    border-gray-200
-    bg-white
-    p-7
-    shadow-xl
-    ring-1
-    ring-gray-200
-  "
->
-          {/* عنوان */}
+          ref={formRef}
+          onSubmit={handleSubmit}
+          className="flex w-full max-w-md flex-col gap-5 rounded-2xl border border-gray-200 bg-white p-7 shadow-xl ring-1 ring-gray-200"
+        >
           <div className="mb-6 text-center">
             <h1 className="text-3xl font-bold text-blue-700">
               {t("title")}
@@ -99,138 +88,47 @@ export default function Anmeldung() {
             </p>
           </div>
 
-          {/* First Name */}
           <input
             name="firstName"
             type="text"
             required
-            className="
-              w-full
-              rounded-xl
-              border-2
-              border-gray-300
-              bg-gray-50
-              p-3
-              font-semibold
-              text-gray-900
-              outline-none
-              transition
-              placeholder:font-normal
-              placeholder:text-gray-400
-              focus:border-blue-600
-              focus:bg-white
-              focus:ring-2
-              focus:ring-blue-100
-            "
+            className="w-full rounded-xl border-2 border-gray-300 bg-gray-50 p-3 font-semibold text-gray-900 outline-none transition placeholder:font-normal placeholder:text-gray-400 focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100"
             placeholder={t("firstName")}
           />
 
-          {/* Last Name */}
           <input
             name="lastName"
             type="text"
             required
-            className="
-              w-full
-              rounded-xl
-              border-2
-              border-gray-300
-              bg-gray-50
-              p-3
-              font-semibold
-              text-gray-900
-              outline-none
-              transition
-              placeholder:font-normal
-              placeholder:text-gray-400
-              focus:border-blue-600
-              focus:bg-white
-              focus:ring-2
-              focus:ring-blue-100
-            "
+            className="w-full rounded-xl border-2 border-gray-300 bg-gray-50 p-3 font-semibold text-gray-900 outline-none transition placeholder:font-normal placeholder:text-gray-400 focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100"
             placeholder={t("lastName")}
           />
 
-          {/* Email */}
           <input
             name="email"
             type="email"
             required
-            className="
-              w-full
-              rounded-xl
-              border-2
-              border-gray-300
-              bg-gray-50
-              p-3
-              font-semibold
-              text-gray-900
-              outline-none
-              transition
-              placeholder:font-normal
-              placeholder:text-gray-400
-              focus:border-blue-600
-              focus:bg-white
-              focus:ring-2
-              focus:ring-blue-100
-            "
+            className="w-full rounded-xl border-2 border-gray-300 bg-gray-50 p-3 font-semibold text-gray-900 outline-none transition placeholder:font-normal placeholder:text-gray-400 focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100"
             placeholder={t("email")}
           />
 
-          {/* Phone Number */}
           <input
             name="phone"
             type="tel"
             required
             inputMode="tel"
             autoComplete="tel"
-            className="
-              w-full
-              rounded-xl
-              border-2
-              border-gray-300
-              bg-gray-50
-              p-3
-              font-semibold
-              text-gray-900
-              outline-none
-              transition
-              placeholder:font-normal
-              placeholder:text-gray-400
-              focus:border-blue-600
-              focus:bg-white
-              focus:ring-2
-              focus:ring-blue-100
-            "
+            className="w-full rounded-xl border-2 border-gray-300 bg-gray-50 p-3 font-semibold text-gray-900 outline-none transition placeholder:font-normal placeholder:text-gray-400 focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100"
             placeholder={t("phone")}
           />
 
-          {/* Password */}
           <div className="relative">
             <input
               name="password"
               type={showPassword ? "text" : "password"}
               required
               minLength={8}
-              className="
-                w-full
-                rounded-xl
-                border-2
-                border-gray-300
-                bg-gray-50
-                p-3
-                pr-12
-                font-semibold
-                text-gray-900
-                outline-none
-                transition
-                placeholder:font-normal
-                placeholder:text-gray-400
-                focus:border-blue-600
-                focus:bg-white
-                focus:ring-2
-                focus:ring-blue-100
-              "
+              className="w-full rounded-xl border-2 border-gray-300 bg-gray-50 p-3 pr-12 font-semibold text-gray-900 outline-none transition placeholder:font-normal placeholder:text-gray-400 focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100"
               placeholder={t("password")}
             />
 
@@ -239,70 +137,24 @@ export default function Anmeldung() {
               onClick={() =>
                 setShowPassword((previous) => !previous)
               }
-              className="
-                absolute
-                right-3
-                top-1/2
-                -translate-y-1/2
-                text-xl
-                text-gray-600
-                transition
-                hover:text-blue-700
-              "
-              aria-label={
-                showPassword
-                  ? "Hide password"
-                  : "Show password"
-              }
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-xl text-gray-600 transition hover:text-blue-700"
             >
               {showPassword ? "🙈" : "👁️"}
             </button>
           </div>
 
-          {/* Birth Date */}
           <input
             name="birthDate"
             type="date"
             required
-            className="
-              w-full
-              rounded-xl
-              border-2
-              border-gray-300
-              bg-gray-50
-              p-3
-              font-semibold
-              text-gray-900
-              outline-none
-              transition
-              focus:border-blue-600
-              focus:bg-white
-              focus:ring-2
-              focus:ring-blue-100
-            "
+            className="w-full rounded-xl border-2 border-gray-300 bg-gray-50 p-3 font-semibold text-gray-900 outline-none transition focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100"
           />
 
-          {/* Level */}
           <select
             name="level"
             required
             defaultValue="A1"
-            className="
-              w-full
-              rounded-xl
-              border-2
-              border-gray-300
-              bg-gray-50
-              p-3
-              font-semibold
-              text-gray-900
-              outline-none
-              transition
-              focus:border-blue-600
-              focus:bg-white
-              focus:ring-2
-              focus:ring-blue-100
-            "
+            className="w-full rounded-xl border-2 border-gray-300 bg-gray-50 p-3 font-semibold text-gray-900 outline-none transition focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-100"
           >
             <option value="A1">{t("level.a1")}</option>
             <option value="A2">{t("level.a2")}</option>
@@ -311,92 +163,40 @@ export default function Anmeldung() {
             <option value="C1">{t("level.c1")}</option>
           </select>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
-            className="
-              w-full
-              rounded-xl
-              bg-blue-700
-              p-3.5
-              font-bold
-              text-white
-              shadow-md
-              transition
-              hover:bg-blue-800
-              hover:shadow-lg
-              disabled:cursor-not-allowed
-              disabled:opacity-60
-            "
+            className="w-full rounded-xl bg-blue-700 p-3.5 font-bold text-white shadow-md transition hover:bg-blue-800 hover:shadow-lg disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "..." : t("submit")}
           </button>
 
-          {/* Message */}
           {message && (
-            <p
-              className="
-                rounded-xl
-                border
-                border-gray-200
-                bg-gray-50
-                p-3
-                text-center
-                text-sm
-                font-semibold
-                text-gray-800
-              "
-            >
+            <p className="rounded-xl border border-gray-200 bg-gray-50 p-3 text-center text-sm font-semibold text-gray-800">
               {message}
             </p>
           )}
 
-          {/* OR */}
           <div className="flex items-center gap-3 py-1">
             <div className="h-px flex-1 bg-gray-300" />
-
             <span className="text-xs font-bold text-gray-500">
               OR
             </span>
-
             <div className="h-px flex-1 bg-gray-300" />
           </div>
 
-          {/* Login */}
           <button
             type="button"
             onClick={() => router.push(`/${locale}/login`)}
-            className="
-              w-full
-              rounded-xl
-              border-2
-              border-blue-700
-              p-3.5
-              font-bold
-              text-blue-700
-              transition
-              hover:bg-blue-50
-            "
+            className="w-full rounded-xl border-2 border-blue-700 p-3.5 font-bold text-blue-700 transition hover:bg-blue-50"
           >
             Login
           </button>
 
-          {/* Back */}
           <button
             type="button"
             onClick={() => router.push(`/${locale}`)}
-            className="
-              w-full
-              rounded-xl
-              border-2
-              border-gray-300
-              p-3
-              font-semibold
-              text-gray-700
-              transition
-              hover:bg-gray-100
-            "
+            className="w-full rounded-xl border-2 border-gray-300 p-3 font-semibold text-gray-700 transition hover:bg-gray-100"
           >
             ← {t("back")}
           </button>

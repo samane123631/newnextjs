@@ -119,8 +119,7 @@ export async function POST(request: Request) {
       },
     });
 
-    // فعلاً برای تست، کد را در Console نشان می‌دهیم.
-    // بعداً همین قسمت را به سرویس SMS وصل می‌کنیم.
+    // در Local برای تست در Terminal نمایش داده می‌شود
     console.log(
       `PHONE VERIFICATION CODE for ${phone}: ${verificationCode}`
     );
