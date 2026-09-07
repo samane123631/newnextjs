@@ -134,7 +134,16 @@
     "email": "Email",
     "birthDate": "Date of Birth",
     "level": "German Level",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "evaluation": "My Evaluation",
+    "evaluationDescription": "Your current learning performance",
+    "currentAverage": "Current Average",
+    "termAverage": "Term Average",
+    "grammar": "Grammar",
+    "speaking": "Speaking",
+    "writing": "Writing",
+    "listening": "Listening",
+    "noEvaluations": "No evaluations are available yet."
   },
 
   "VerifyPhone": {

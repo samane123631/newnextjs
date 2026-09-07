@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -16,32 +16,36 @@ export async function OPTIONS() {
 
 export async function GET() {
   try {
-    const classes = await prisma.class.findMany({
+    const students = await prisma.user.findMany({
+      where: {
+        role: "USER",
+      },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        level: true,
+        email: true,
+      },
       orderBy: {
-        createdAt: "desc",
+        firstName: "asc",
       },
     });
 
     return NextResponse.json(
       {
-        success: true,
-        classes,
+        students,
       },
       {
         headers: corsHeaders,
       }
     );
   } catch (error) {
-    console.error("GET PUBLIC CLASSES ERROR:", error);
+    console.error("Failed to fetch students:", error);
 
     return NextResponse.json(
       {
-        success: false,
-        message: "خطا در دریافت کلاس‌ها.",
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unknown error",
+        error: "Failed to fetch students",
       },
       {
         status: 500,

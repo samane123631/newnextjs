@@ -134,7 +134,16 @@
     "email": "ایمیل",
     "birthDate": "تاریخ تولد",
     "level": "سطح زبان آلمانی",
-    "loading": "در حال بارگذاری..."
+    "loading": "در حال بارگذاری...",
+    "evaluation": "ارزیابی من",
+    "evaluationDescription": "عملکرد فعلی شما در یادگیری",
+    "currentAverage": "میانگین فعلی",
+    "termAverage": "میانگین ترم",
+    "grammar": "گرامر",
+    "speaking": "مکالمه",
+    "writing": "نوشتن",
+    "listening": "شنیداری",
+    "noEvaluations": "هنوز ارزیابی‌ای برای شما ثبت نشده است."
   },
 
   "VerifyPhone": {

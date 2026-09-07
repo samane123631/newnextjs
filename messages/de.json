@@ -134,7 +134,16 @@
     "email": "E-Mail",
     "birthDate": "Geburtsdatum",
     "level": "Deutschniveau",
-    "loading": "Wird geladen..."
+    "loading": "Wird geladen...",
+    "evaluation": "Meine Bewertung",
+    "evaluationDescription": "Ihre aktuelle Lernleistung",
+    "currentAverage": "Aktueller Durchschnitt",
+    "termAverage": "Semesterdurchschnitt",
+    "grammar": "Grammatik",
+    "speaking": "Sprechen",
+    "writing": "Schreiben",
+    "listening": "Hören",
+    "noEvaluations": "Noch keine Bewertungen verfügbar."
   },
 
   "VerifyPhone": {
