@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Methods": "POST, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Accept",
 };
 
@@ -20,6 +20,9 @@ export async function OPTIONS() {
   });
 }
 
+// ===============================
+// Upload Profile Image
+// ===============================
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ studentId: string }> },
@@ -42,9 +45,7 @@ export async function POST(
     }
 
     const student = await prisma.user.findUnique({
-      where: {
-        id,
-      },
+      where: { id },
       select: {
         id: true,
       },
@@ -79,7 +80,6 @@ export async function POST(
       );
     }
 
-    // File information
     const fileName = file.name.toLowerCase();
     const fileType = file.type.toLowerCase();
 
@@ -87,7 +87,6 @@ export async function POST(
     console.log("PROFILE FILE TYPE:", file.type);
     console.log("PROFILE FILE SIZE:", file.size);
 
-    // Determine extension
     let extension: string | null = null;
 
     if (
@@ -143,18 +142,16 @@ export async function POST(
           ? "image/webp"
           : "image/jpeg";
 
-    const filePath =
-      `students/${id}/profile.${extension}`;
+    const filePath = `students/${id}/profile.${extension}`;
 
     const bytes = await file.arrayBuffer();
 
-    const { error: uploadError } =
-      await supabase.storage
-        .from("student-profiles")
-        .upload(filePath, bytes, {
-          contentType,
-          upsert: true,
-        });
+    const { error: uploadError } = await supabase.storage
+      .from("student-profiles")
+      .upload(filePath, bytes, {
+        contentType,
+        upsert: true,
+      });
 
     if (uploadError) {
       console.error(
@@ -174,18 +171,14 @@ export async function POST(
       );
     }
 
-    const { data: publicUrlData } =
-      supabase.storage
-        .from("student-profiles")
-        .getPublicUrl(filePath);
+    const { data: publicUrlData } = supabase.storage
+      .from("student-profiles")
+      .getPublicUrl(filePath);
 
-    const profileImage =
-      publicUrlData.publicUrl;
+    const profileImage = publicUrlData.publicUrl;
 
     await prisma.user.update({
-      where: {
-        id,
-      },
+      where: { id },
       data: {
         profileImage,
       },
@@ -211,6 +204,139 @@ export async function POST(
       {
         success: false,
         message: "Failed to save profile image",
+      },
+      {
+        status: 500,
+        headers: corsHeaders,
+      },
+    );
+  }
+}
+
+// ===============================
+// Delete Profile Image
+// ===============================
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ studentId: string }> },
+) {
+  try {
+    const { studentId } = await params;
+    const id = Number(studentId);
+
+    if (!Number.isInteger(id)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Invalid student ID",
+        },
+        {
+          status: 400,
+          headers: corsHeaders,
+        },
+      );
+    }
+
+    const student = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        profileImage: true,
+      },
+    });
+
+    if (!student) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Student not found",
+        },
+        {
+          status: 404,
+          headers: corsHeaders,
+        },
+      );
+    }
+
+    // اگر عکسی وجود نداشته باشد
+    if (!student.profileImage) {
+      return NextResponse.json(
+        {
+          success: true,
+          message: "No profile image to delete",
+        },
+        {
+          status: 200,
+          headers: corsHeaders,
+        },
+      );
+    }
+
+    // مسیر فایل داخل Supabase Storage
+    const marker = "/student-profiles/";
+
+    const markerIndex =
+      student.profileImage.indexOf(marker);
+
+    if (markerIndex !== -1) {
+      const filePath = decodeURIComponent(
+        student.profileImage.substring(
+          markerIndex + marker.length,
+        ),
+      );
+
+      const { error: deleteError } =
+        await supabase.storage
+          .from("student-profiles")
+          .remove([filePath]);
+
+      if (deleteError) {
+        console.error(
+          "PROFILE IMAGE DELETE ERROR:",
+          deleteError,
+        );
+
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Failed to delete profile image",
+          },
+          {
+            status: 500,
+            headers: corsHeaders,
+          },
+        );
+      }
+    }
+
+    // حذف URL از دیتابیس
+    await prisma.user.update({
+      where: { id },
+      data: {
+        profileImage: null,
+      },
+    });
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Profile image deleted successfully",
+      },
+      {
+        status: 200,
+        headers: corsHeaders,
+      },
+    );
+  } catch (error) {
+    console.error(
+      "PROFILE IMAGE DELETE ERROR:",
+      error,
+    );
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Failed to delete profile image",
       },
       {
         status: 500,
