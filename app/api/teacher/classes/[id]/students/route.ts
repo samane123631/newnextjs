@@ -94,6 +94,7 @@ export async function GET(
             lastName: true,
             level: true,
             email: true,
+            profileImage: true,
           },
         },
       },
