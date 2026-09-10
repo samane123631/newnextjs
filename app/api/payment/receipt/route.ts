@@ -109,6 +109,23 @@ export async function POST(request: Request) {
       );
     }
 
+    const registeredCount = await prisma.payment.count({
+      where: {
+        classId: classId,
+        status: "PENDING",
+      },
+    });
+
+    if (registeredCount >= classItem.maxStudents) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "ظرفیت این کلاس تکمیل شده است.",
+        },
+        { status: 409 }
+      );
+    }
+
     // 6. بررسی نوع فایل
     const allowedTypes = [
       "image/jpeg",

@@ -8,14 +8,19 @@ type Props = {
     locale: string;
     id: string;
   }>;
+  searchParams: Promise<{
+    full?: string;
+  }>;
 };
 
 export const dynamic = "force-dynamic";
 
 export default async function CourseRegisterPage({
   params,
+  searchParams,
 }: Props) {
   const { locale: routeLocale, id } = await params;
+  const { full } = await searchParams;
 
   const locale = await getLocale();
   const t = await getTranslations("Courses");
@@ -35,6 +40,18 @@ export default async function CourseRegisterPage({
   if (!classItem) {
     notFound();
   }
+
+  const registeredCount = await prisma.payment.count({
+    where: {
+      classId: classId,
+      status: "PENDING",
+    },
+  });
+
+  const remainingCapacity = Math.max(
+    0,
+    classItem.maxStudents - registeredCount
+  );
 
   const title =
     locale === "fa"
@@ -73,6 +90,27 @@ export default async function CourseRegisterPage({
       redirect(`/${routeLocale}/login`);
     }
 
+    const currentClass = await prisma.class.findUnique({
+      where: {
+        id: classId,
+      },
+    });
+
+    if (!currentClass) {
+      notFound();
+    }
+
+    const registeredCount = await prisma.payment.count({
+      where: {
+        classId: classId,
+        status: "PENDING",
+      },
+    });
+
+    if (registeredCount >= currentClass.maxStudents) {
+      redirect(`/${routeLocale}/courses/${classId}/register?full=true`);
+    }
+
     redirect(`/${routeLocale}/courses/${classId}/payment`);
   }
 
@@ -93,6 +131,16 @@ export default async function CourseRegisterPage({
                 : "Would you like to register for this course?"}
           </p>
 
+          {full === "true" && (
+            <div className="mt-5 rounded-xl bg-red-50 p-4 text-center text-sm font-semibold leading-6 text-red-700">
+              {locale === "fa"
+                ? "ظرفیت این کلاس تکمیل شده است."
+                : locale === "de"
+                  ? "Die Kapazität dieses Kurses ist bereits voll."
+                  : "This course is already full."}
+            </div>
+          )}
+
           <div className="mt-7 rounded-xl bg-gray-50 p-4 sm:mt-8 sm:p-5">
             <div className="space-y-3 text-sm leading-6 text-gray-700 sm:text-base">
 
@@ -105,7 +153,7 @@ export default async function CourseRegisterPage({
 
               <p>
                 <strong>{t("capacity")}:</strong>{" "}
-                {classItem.maxStudents}
+                {remainingCapacity}
               </p>
 
             </div>

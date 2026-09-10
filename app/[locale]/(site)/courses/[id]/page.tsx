@@ -36,6 +36,18 @@ export default async function CourseDetailsPage({ params }: Props) {
 
   const classItem = result;
 
+  const registeredCount = await prisma.payment.count({
+    where: {
+      classId: classId,
+      status: "PENDING",
+    },
+  });
+
+  const remainingCapacity = Math.max(
+    0,
+    classItem.maxStudents - registeredCount
+  );
+
   const title =
     locale === "fa"
       ? classItem.titleFa ||
@@ -246,7 +258,7 @@ export default async function CourseDetailsPage({ params }: Props) {
             <div>
               👥{" "}
               <strong>{t("capacity")}:</strong>{" "}
-              {classItem.maxStudents}
+              {remainingCapacity}
             </div>
 
             <div>

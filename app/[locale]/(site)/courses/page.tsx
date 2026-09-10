@@ -12,6 +12,17 @@ export default async function CoursesPage() {
     orderBy: {
       createdAt: "desc",
     },
+    include: {
+      _count: {
+        select: {
+          payments: {
+            where: {
+              status: "PENDING",
+            },
+          },
+        },
+      },
+    },
   });
 
   function getTitle(item: (typeof classes)[number]) {
@@ -211,77 +222,84 @@ export default async function CoursesPage() {
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
-            {classes.map((item) => (
-              <div
-                key={item.id}
-                className="rounded-2xl bg-white p-6 shadow-md"
-              >
-                <h2 className="mb-3 text-xl font-bold text-blue-700">
-                  {getTitle(item)}
-                </h2>
+            {classes.map((item) => {
+              const remainingCapacity = Math.max(
+                0,
+                item.maxStudents - item._count.payments
+              );
 
-                <p className="mb-5 text-gray-600">
-                  {getDescription(item)}
-                </p>
+              return (
+                <div
+                  key={item.id}
+                  className="rounded-2xl bg-white p-6 shadow-md"
+                >
+                  <h2 className="mb-3 text-xl font-bold text-blue-700">
+                    {getTitle(item)}
+                  </h2>
 
-                <div className="space-y-3 text-sm text-gray-700">
-
-                  <div>
-                    👨‍🏫{" "}
-                    <strong>
-                      {t("teacher")}:
-                    </strong>{" "}
+                  <p className="mb-5 text-gray-600">
                     {getDescription(item)}
+                  </p>
+
+                  <div className="space-y-3 text-sm text-gray-700">
+
+                    <div>
+                      👨‍🏫{" "}
+                      <strong>
+                        {t("teacher")}:
+                      </strong>{" "}
+                      {getDescription(item)}
+                    </div>
+
+                    <div>
+                      🕒{" "}
+                      <strong>
+                        {t("time")}:
+                      </strong>{" "}
+                      {getDay(item.day)}{" "}
+                      {item.startTime} -{" "}
+                      {item.endTime}
+                    </div>
+
+                    <div>
+                      📅{" "}
+                      <strong>
+                        {t("duration")}:
+                      </strong>{" "}
+                      {getDuration(
+                        item.startDate,
+                        item.endDate
+                      )}
+                    </div>
+
+                    <div>
+                      📍{" "}
+                      <strong>
+                        {t("format")}:
+                      </strong>{" "}
+                      {getFormat(item.format)}
+                    </div>
+
+                    <div>
+                      👥{" "}
+                      <strong>
+                        {t("capacity")}:
+                      </strong>{" "}
+                      {remainingCapacity}
+                    </div>
+
                   </div>
 
-                  <div>
-                    🕒{" "}
-                    <strong>
-                      {t("time")}:
-                    </strong>{" "}
-                    {getDay(item.day)}{" "}
-                    {item.startTime} -{" "}
-                    {item.endTime}
-                  </div>
-
-                  <div>
-                    📅{" "}
-                    <strong>
-                      {t("duration")}:
-                    </strong>{" "}
-                    {getDuration(
-                      item.startDate,
-                      item.endDate
-                    )}
-                  </div>
-
-                  <div>
-                    📍{" "}
-                    <strong>
-                      {t("format")}:
-                    </strong>{" "}
-                    {getFormat(item.format)}
-                  </div>
-
-                  <div>
-                    👥{" "}
-                    <strong>
-                      {t("capacity")}:
-                    </strong>{" "}
-                    {item.maxStudents}
-                  </div>
+                  <Link
+                    href={`/${locale}/courses/${item.id}`}
+                    className="mt-6 block w-full rounded-lg bg-blue-700 py-3 text-center text-white transition hover:bg-blue-800"
+                  >
+                    {t("register")}
+                  </Link>
 
                 </div>
-
-                <Link
-                  href={`/${locale}/courses/${item.id}`}
-                  className="mt-6 block w-full rounded-lg bg-blue-700 py-3 text-center text-white transition hover:bg-blue-800"
-                >
-                  {t("register")}
-                </Link>
-
-              </div>
-            ))}
+              );
+            })}
 
           </div>
         )}
