@@ -19,13 +19,14 @@ type ClassItem = {
   descriptionDe: string | null;
   descriptionEn: string | null;
 
-  day: string;
-  startTime: string;
-  endTime: string;
+  teacher: string | null;
+
+  day: string | null;
+  startTime: string | null;
+  endTime: string | null;
   format: string | null;
 
-  startDate: string | null;
-  endDate: string | null;
+  numberOfSessions: number | null;
 
   createdAt: string;
   updatedAt: string;
@@ -141,37 +142,11 @@ export default function MegaMenu() {
     );
   }
 
-  function getDescription(item: ClassItem) {
-    if (locale === "fa") {
-      return (
-        item.descriptionFa ||
-        item.descriptionDe ||
-        item.descriptionEn ||
-        item.description ||
-        "-"
-      );
-    }
-
-    if (locale === "de") {
-      return (
-        item.descriptionDe ||
-        item.descriptionEn ||
-        item.descriptionFa ||
-        item.description ||
-        "-"
-      );
-    }
-
-    return (
-      item.descriptionEn ||
-      item.descriptionDe ||
-      item.descriptionFa ||
-      item.description ||
-      "-"
-    );
-  }
-
   function getDay(item: ClassItem) {
+    if (!item.day) {
+      return "-";
+    }
+
     const days: Record<
       string,
       {
@@ -208,7 +183,7 @@ export default function MegaMenu() {
       Saturday: {
         fa: "شنبه",
         de: "Samstag",
-        en: "Saturday",
+        en: "Samstag",
       },
       Sunday: {
         fa: "یکشنبه",
@@ -263,34 +238,22 @@ export default function MegaMenu() {
   }
 
   function getDuration(item: ClassItem) {
-    if (!item.startDate || !item.endDate) {
-      return "-";
-    }
-
-    const start = new Date(item.startDate);
-    const end = new Date(item.endDate);
-
-    const difference =
-      end.getTime() - start.getTime();
-
-    const weeks = Math.ceil(
-      difference /
-        (1000 * 60 * 60 * 24 * 7)
-    );
-
-    if (weeks <= 0) {
+    if (
+      item.numberOfSessions === null ||
+      item.numberOfSessions === undefined
+    ) {
       return "-";
     }
 
     if (locale === "fa") {
-      return `${weeks} هفته`;
+      return `${item.numberOfSessions} جلسه`;
     }
 
     if (locale === "en") {
-      return `${weeks} weeks`;
+      return `${item.numberOfSessions} sessions`;
     }
 
-    return `${weeks} Wochen`;
+    return `${item.numberOfSessions} Sitzungen`;
   }
 
   const activeIndex =
@@ -393,16 +356,19 @@ export default function MegaMenu() {
                       <li>
                         👨‍🏫{" "}
                         {t("teacher")}:{" "}
-                        {getDescription(activeClass)}
+                        {activeClass.teacher || "-"}
                       </li>
 
                       <li>
                         🕒{" "}
                         {t("time")}:{" "}
                         {getDay(activeClass)}{" "}
-                        {activeClass.startTime}{" "}
-                        -{" "}
-                        {activeClass.endTime}
+                        {activeClass.startTime || ""}{" "}
+                        {activeClass.startTime &&
+                        activeClass.endTime
+                          ? "-"
+                          : ""}{" "}
+                        {activeClass.endTime || ""}
                       </li>
 
                       <li>

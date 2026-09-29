@@ -86,7 +86,11 @@ export default async function CourseDetailsPage({ params }: Props) {
           classItem.description ||
           "-";
 
-  function getDay(day: string) {
+  function getDay(day: string | null) {
+    if (!day) {
+      return "-";
+    }
+
     const days: Record<
       string,
       {
@@ -123,7 +127,7 @@ export default async function CourseDetailsPage({ params }: Props) {
       Saturday: {
         fa: "شنبه",
         de: "Samstag",
-        en: "Saturday",
+        en: "Samstag",
       },
       Sunday: {
         fa: "یکشنبه",
@@ -177,34 +181,23 @@ export default async function CourseDetailsPage({ params }: Props) {
     return format;
   }
 
-  function getDuration(
-    startDate: Date | null,
-    endDate: Date | null
-  ) {
-    if (!startDate || !endDate) {
-      return "-";
-    }
-
-    const difference =
-      endDate.getTime() - startDate.getTime();
-
-    const weeks = Math.ceil(
-      difference / (1000 * 60 * 60 * 24 * 7)
-    );
-
-    if (weeks <= 0) {
+  function getDuration(numberOfSessions: number | null) {
+    if (
+      numberOfSessions === null ||
+      numberOfSessions === undefined
+    ) {
       return "-";
     }
 
     if (locale === "fa") {
-      return `${weeks} هفته`;
+      return `${numberOfSessions} جلسه`;
     }
 
     if (locale === "de") {
-      return `${weeks} Wochen`;
+      return `${numberOfSessions} Sitzungen`;
     }
 
-    return `${weeks} weeks`;
+    return `${numberOfSessions} sessions`;
   }
 
   const registerUrl =
@@ -231,16 +224,17 @@ export default async function CourseDetailsPage({ params }: Props) {
               🕒{" "}
               <strong>{t("time")}:</strong>{" "}
               {getDay(classItem.day)}{" "}
-              {classItem.startTime} - {classItem.endTime}
+              {classItem.startTime || ""}{" "}
+              {classItem.startTime && classItem.endTime
+                ? "-"
+                : ""}{" "}
+              {classItem.endTime || ""}
             </div>
 
             <div>
               📅{" "}
               <strong>{t("duration")}:</strong>{" "}
-              {getDuration(
-                classItem.startDate,
-                classItem.endDate
-              )}
+              {getDuration(classItem.numberOfSessions)}
             </div>
 
             <div>

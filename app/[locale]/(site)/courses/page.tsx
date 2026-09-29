@@ -85,7 +85,11 @@ export default async function CoursesPage() {
     );
   }
 
-  function getDay(day: string) {
+  function getDay(day: string | null) {
+    if (!day) {
+      return "-";
+    }
+
     const days: Record<
       string,
       {
@@ -122,7 +126,7 @@ export default async function CoursesPage() {
       Saturday: {
         fa: "شنبه",
         de: "Samstag",
-        en: "Saturday",
+        en: "Samstag",
       },
       Sunday: {
         fa: "یکشنبه",
@@ -176,35 +180,23 @@ export default async function CoursesPage() {
     return format;
   }
 
-  function getDuration(
-    startDate: Date | null,
-    endDate: Date | null
-  ) {
-    if (!startDate || !endDate) {
-      return "-";
-    }
-
-    const difference =
-      endDate.getTime() - startDate.getTime();
-
-    const weeks = Math.ceil(
-      difference /
-        (1000 * 60 * 60 * 24 * 7)
-    );
-
-    if (weeks <= 0) {
+  function getDuration(numberOfSessions: number | null) {
+    if (
+      numberOfSessions === null ||
+      numberOfSessions === undefined
+    ) {
       return "-";
     }
 
     if (locale === "fa") {
-      return `${weeks} هفته`;
+      return `${numberOfSessions} جلسه`;
     }
 
     if (locale === "de") {
-      return `${weeks} Wochen`;
+      return `${numberOfSessions} Sitzungen`;
     }
 
-    return `${weeks} weeks`;
+    return `${numberOfSessions} sessions`;
   }
 
   return (
@@ -248,7 +240,7 @@ export default async function CoursesPage() {
                       <strong>
                         {t("teacher")}:
                       </strong>{" "}
-                      {getDescription(item)}
+                      {item.teacher || "-"}
                     </div>
 
                     <div>
@@ -257,8 +249,11 @@ export default async function CoursesPage() {
                         {t("time")}:
                       </strong>{" "}
                       {getDay(item.day)}{" "}
-                      {item.startTime} -{" "}
-                      {item.endTime}
+                      {item.startTime || ""}{" "}
+                      {item.startTime && item.endTime
+                        ? "-"
+                        : ""}{" "}
+                      {item.endTime || ""}
                     </div>
 
                     <div>
@@ -266,10 +261,7 @@ export default async function CoursesPage() {
                       <strong>
                         {t("duration")}:
                       </strong>{" "}
-                      {getDuration(
-                        item.startDate,
-                        item.endDate
-                      )}
+                      {getDuration(item.numberOfSessions)}
                     </div>
 
                     <div>

@@ -34,14 +34,16 @@ export async function GET() {
   } catch (error) {
     console.error("GET PUBLIC CLASSES ERROR:", error);
 
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : String(error);
+
     return NextResponse.json(
       {
         success: false,
         message: "خطا در دریافت کلاس‌ها.",
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unknown error",
+        error: errorMessage,
       },
       {
         status: 500,

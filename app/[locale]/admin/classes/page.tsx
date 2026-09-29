@@ -15,13 +15,14 @@ type ClassItem = {
   descriptionDe: string | null;
   descriptionEn: string | null;
 
+  teacher: string | null;
+
   day: string | null;
   startTime: string | null;
   endTime: string | null;
   format: string | null;
 
-  startDate: string | null;
-  endDate: string | null;
+  numberOfSessions: number | null;
 
   maxStudents: number;
 
@@ -38,13 +39,14 @@ type FormData = {
   descriptionDe: string;
   descriptionEn: string;
 
+  teacher: string;
+
   day: string[];
   startTime: string;
   endTime: string;
   format: string;
 
-  startDate: string;
-  endDate: string;
+  numberOfSessions: string;
 
   maxStudents: number;
 
@@ -61,15 +63,16 @@ const emptyForm: FormData = {
   descriptionDe: "",
   descriptionEn: "",
 
+  teacher: "",
+
   day: [],
   startTime: "",
   endTime: "",
   format: "",
 
-  startDate: "",
-  endDate: "",
+  numberOfSessions: "",
 
-  maxStudents: 7,
+  maxStudents: 10,
 
   price: "",
   currency: "EUR",
@@ -237,7 +240,7 @@ export default function AdminClassesPage() {
 
     setForm({
       ...emptyForm,
-      maxStudents: 7,
+      maxStudents: 10,
       price: "",
       currency: "EUR",
     });
@@ -269,6 +272,9 @@ export default function AdminClassesPage() {
       descriptionEn:
         item.descriptionEn ?? "",
 
+      teacher:
+        item.teacher ?? "",
+
       day: selectedDays,
 
       startTime:
@@ -280,24 +286,16 @@ export default function AdminClassesPage() {
       format:
         item.format ?? "",
 
-      startDate: item.startDate
-        ? String(item.startDate).substring(
-            0,
-            10
-          )
-        : "",
-
-      endDate: item.endDate
-        ? String(item.endDate).substring(
-            0,
-            10
-          )
-        : "",
+      numberOfSessions:
+        item.numberOfSessions !== null &&
+        item.numberOfSessions !== undefined
+          ? String(item.numberOfSessions)
+          : "",
 
       maxStudents:
         typeof item.maxStudents === "number"
           ? item.maxStudents
-          : 7,
+          : 10,
 
       price:
         item.price !== null &&
@@ -318,7 +316,7 @@ export default function AdminClassesPage() {
 
     setForm({
       ...emptyForm,
-      maxStudents: 7,
+      maxStudents: 10,
       price: "",
       currency: "EUR",
     });
@@ -332,13 +330,10 @@ export default function AdminClassesPage() {
     if (
       !form.titleFa.trim() ||
       !form.titleDe.trim() ||
-      !form.titleEn.trim() ||
-      form.day.length === 0 ||
-      !form.startTime ||
-      !form.endTime
+      !form.titleEn.trim()
     ) {
       alert(
-        "لطفاً عنوان کلاس را در هر سه زبان، حداقل یک روز و اطلاعات زمان‌بندی را کامل وارد کنید."
+        "لطفاً عنوان کلاس را در هر سه زبان وارد کنید."
       );
       return;
     }
@@ -346,10 +341,26 @@ export default function AdminClassesPage() {
     if (
       !Number.isInteger(form.maxStudents) ||
       form.maxStudents < 1 ||
-      form.maxStudents > 7
+      form.maxStudents > 10
     ) {
       alert(
-        "ظرفیت کلاس باید بین 1 تا 7 نفر باشد."
+        "ظرفیت کلاس باید بین 1 تا 10 نفر باشد."
+      );
+      return;
+    }
+
+    const parsedSessions =
+      form.numberOfSessions.trim() === ""
+        ? null
+        : Number(form.numberOfSessions);
+
+    if (
+      parsedSessions !== null &&
+      (!Number.isInteger(parsedSessions) ||
+        parsedSessions < 1)
+    ) {
+      alert(
+        "تعداد جلسات کلاس معتبر نیست."
       );
       return;
     }
@@ -402,23 +413,29 @@ export default function AdminClassesPage() {
           form.descriptionEn.trim() ||
           null,
 
+        teacher:
+          form.teacher.trim() ||
+          null,
+
         day:
-          form.day.join(", "),
+          form.day.length > 0
+            ? form.day.join(", ")
+            : null,
 
         startTime:
-          form.startTime,
+          form.startTime.trim() ||
+          null,
 
         endTime:
-          form.endTime,
+          form.endTime.trim() ||
+          null,
 
         format:
-          form.format || null,
+          form.format.trim() ||
+          null,
 
-        startDate:
-          form.startDate || null,
-
-        endDate:
-          form.endDate || null,
+        numberOfSessions:
+          parsedSessions,
 
         maxStudents:
           form.maxStudents,
@@ -670,11 +687,28 @@ export default function AdminClassesPage() {
                 />
               </div>
 
+              {/* TEACHER */}
+
+              <div>
+                <label className="mb-2 block font-semibold text-gray-700">
+                  Teacher
+                </label>
+
+                <input
+                  type="text"
+                  name="teacher"
+                  value={form.teacher}
+                  onChange={handleChange}
+                  placeholder="Herr Eftekharzadeh"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+                />
+              </div>
+
               {/* DESCRIPTION FA */}
 
               <div>
                 <label className="mb-2 block font-semibold text-gray-700">
-                  Teacher / Description — فارسی
+                  Description — فارسی
                 </label>
 
                 <input
@@ -682,7 +716,7 @@ export default function AdminClassesPage() {
                   name="descriptionFa"
                   value={form.descriptionFa}
                   onChange={handleChange}
-                  placeholder="استاد آزادی"
+                  placeholder="توضیحات کلاس"
                   dir="rtl"
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
@@ -692,7 +726,7 @@ export default function AdminClassesPage() {
 
               <div>
                 <label className="mb-2 block font-semibold text-gray-700">
-                  Teacher / Description — Deutsch
+                  Description — Deutsch
                 </label>
 
                 <input
@@ -700,7 +734,7 @@ export default function AdminClassesPage() {
                   name="descriptionDe"
                   value={form.descriptionDe}
                   onChange={handleChange}
-                  placeholder="Frau Azadi"
+                  placeholder="Beschreibung des Kurses"
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
               </div>
@@ -709,7 +743,7 @@ export default function AdminClassesPage() {
 
               <div>
                 <label className="mb-2 block font-semibold text-gray-700">
-                  Teacher / Description — English
+                  Description — English
                 </label>
 
                 <input
@@ -717,7 +751,7 @@ export default function AdminClassesPage() {
                   name="descriptionEn"
                   value={form.descriptionEn}
                   onChange={handleChange}
-                  placeholder="Ms. Azadi"
+                  placeholder="Course description"
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
               </div>
@@ -787,26 +821,221 @@ export default function AdminClassesPage() {
                   Format
                 </label>
 
-                <select
-                  name="format"
-                  value={form.format}
-                  onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
-                >
+                <div className="relative">
 
-                  <option value="">
-                    Select format
-                  </option>
+                  <div className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3">
 
-                  <option value="Online">
-                    Online
-                  </option>
+                    {form.format ? (
+                      <div className="flex items-center justify-between gap-2">
 
-                  <option value="Präsenz">
-                    Präsenz
-                  </option>
+                        <span className="text-gray-700">
+                          {form.format}
+                        </span>
 
-                </select>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setForm(
+                              (previous) => ({
+                                ...previous,
+                                format: "",
+                              })
+                            )
+                          }
+                          className="text-sm text-gray-400 hover:text-red-500"
+                        >
+                          ×
+                        </button>
+
+                      </div>
+                    ) : (
+                      <span className="text-gray-400">
+                        Select format
+                      </span>
+                    )}
+
+                  </div>
+
+                  {!form.format && (
+                    <div className="mt-2 space-y-2">
+
+                      {/* ONLINE */}
+
+                      <div className="group relative">
+
+                        <button
+                          type="button"
+                          className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-3 text-left text-gray-700 hover:bg-gray-50"
+                        >
+                          <span>
+                            Online
+                          </span>
+
+                          <span>
+                            ›
+                          </span>
+                        </button>
+
+                        <div className="hidden w-full gap-2 pt-2 group-hover:block sm:absolute sm:left-full sm:top-0 sm:z-50 sm:ml-2 sm:w-48 sm:pt-0">
+
+                          <div className="rounded-lg border border-gray-200 bg-white p-2 shadow-lg">
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setForm(
+                                  (
+                                    previous
+                                  ) => ({
+                                    ...previous,
+                                    format:
+                                      "Online - Intensive",
+                                  })
+                                )
+                              }
+                              className="block w-full rounded-md px-3 py-2 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                            >
+                              Intensive
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setForm(
+                                  (
+                                    previous
+                                  ) => ({
+                                    ...previous,
+                                    format:
+                                      "Online - Normal",
+                                  })
+                                )
+                              }
+                              className="block w-full rounded-md px-3 py-2 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                            >
+                              Normal
+                            </button>
+
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                      {/* PRÄSENZ */}
+
+                      <div className="group relative">
+
+                        <button
+                          type="button"
+                          className="flex w-full items-center justify-between rounded-lg border border-gray-300 bg-white px-4 py-3 text-left text-gray-700 hover:bg-gray-50"
+                        >
+                          <span>
+                            Präsenz
+                          </span>
+
+                          <span>
+                            ›
+                          </span>
+                        </button>
+
+                        <div className="hidden w-full gap-2 pt-2 group-hover:block sm:absolute sm:left-full sm:top-0 sm:z-50 sm:ml-2 sm:w-48 sm:pt-0">
+
+                          <div className="rounded-lg border border-gray-200 bg-white p-2 shadow-lg">
+
+                            {/* GROUP */}
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setForm(
+                                  (
+                                    previous
+                                  ) => ({
+                                    ...previous,
+                                    format:
+                                      "Präsenz - Group",
+                                  })
+                                )
+                              }
+                              className="block w-full rounded-md px-3 py-2 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                            >
+                              Group
+                            </button>
+
+                            {/* PRIVATE */}
+
+                            <div className="group/private relative">
+
+                              <button
+                                type="button"
+                                className="flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                              >
+                                <span>
+                                  Private
+                                </span>
+
+                                <span>
+                                  ›
+                                </span>
+                              </button>
+
+                              <div className="hidden pt-1 group-hover/private:block sm:absolute sm:left-full sm:top-0 sm:ml-2 sm:w-48">
+
+                                <div className="rounded-lg border border-gray-200 bg-white p-2 shadow-lg">
+
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      setForm(
+                                        (
+                                          previous
+                                        ) => ({
+                                          ...previous,
+                                          format:
+                                            "Präsenz - Private - Intensive",
+                                        })
+                                      )
+                                    }
+                                    className="block w-full rounded-md px-3 py-2 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                                  >
+                                    Intensive
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      setForm(
+                                        (
+                                          previous
+                                        ) => ({
+                                          ...previous,
+                                          format:
+                                            "Präsenz - Private - Normal",
+                                        })
+                                      )
+                                    }
+                                    className="block w-full rounded-md px-3 py-2 text-left text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                                  >
+                                    Normal
+                                  </button>
+
+                                </div>
+
+                              </div>
+
+                            </div>
+
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+                  )}
+
+                </div>
               </div>
 
               {/* MAX STUDENTS */}
@@ -820,7 +1049,7 @@ export default function AdminClassesPage() {
                   type="number"
                   name="maxStudents"
                   min={1}
-                  max={7}
+                  max={10}
                   value={form.maxStudents}
                   onChange={(event) => {
                     const value =
@@ -840,7 +1069,7 @@ export default function AdminClassesPage() {
                 />
 
                 <p className="mt-2 text-sm text-gray-500">
-                  Maximum allowed capacity: 7 students
+                  Maximum allowed capacity: 10 students
                 </p>
               </div>
 
@@ -930,34 +1159,20 @@ export default function AdminClassesPage() {
                 />
               </div>
 
-              {/* START DATE */}
+              {/* NUMBER OF SESSIONS */}
 
               <div>
                 <label className="mb-2 block font-semibold text-gray-700">
-                  Start Date
+                  Number of Sessions
                 </label>
 
                 <input
-                  type="date"
-                  name="startDate"
-                  value={form.startDate}
+                  type="number"
+                  name="numberOfSessions"
+                  min={1}
+                  value={form.numberOfSessions}
                   onChange={handleChange}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
-                />
-              </div>
-
-              {/* END DATE */}
-
-              <div>
-                <label className="mb-2 block font-semibold text-gray-700">
-                  End Date
-                </label>
-
-                <input
-                  type="date"
-                  name="endDate"
-                  value={form.endDate}
-                  onChange={handleChange}
+                  placeholder="15"
                   className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
               </div>
@@ -1111,10 +1326,7 @@ export default function AdminClassesPage() {
                     </td>
 
                     <td className="px-4 py-4">
-                      {item.descriptionDe ??
-                        item.descriptionEn ??
-                        item.descriptionFa ??
-                        "-"}
+                      {item.teacher ?? "-"}
                     </td>
 
                     <td className="px-4 py-4">
@@ -1132,7 +1344,7 @@ export default function AdminClassesPage() {
                     </td>
 
                     <td className="px-4 py-4 font-semibold">
-                      {item.maxStudents ?? 7}
+                      {item.maxStudents ?? 10}
                     </td>
 
                     <td className="px-4 py-4 font-semibold">

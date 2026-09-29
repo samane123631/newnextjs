@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-const MAX_ALLOWED_STUDENTS = 7;
+const MAX_ALLOWED_STUDENTS = 10;
 
 export async function GET() {
   try {
@@ -39,25 +39,18 @@ export async function POST(request: Request) {
       descriptionFa,
       descriptionDe,
       descriptionEn,
+      teacher,
       day,
       startTime,
       endTime,
       format,
-      startDate,
-      endDate,
+      numberOfSessions,
       maxStudents,
       price,
       currency,
     } = body;
 
-    if (
-      !titleFa ||
-      !titleDe ||
-      !titleEn ||
-      !day ||
-      !startTime ||
-      !endTime
-    ) {
+    if (!titleFa || !titleDe || !titleEn) {
       return NextResponse.json(
         {
           success: false,
@@ -71,7 +64,7 @@ export async function POST(request: Request) {
       maxStudents === undefined ||
       maxStudents === null ||
       maxStudents === ""
-        ? 7
+        ? 10
         : Number(maxStudents);
 
     if (
@@ -82,7 +75,27 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          message: "ظرفیت کلاس باید بین 1 تا 7 نفر باشد.",
+          message: "ظرفیت کلاس باید بین 1 تا 10 نفر باشد.",
+        },
+        { status: 400 }
+      );
+    }
+
+    const sessions =
+      numberOfSessions === undefined ||
+      numberOfSessions === null ||
+      numberOfSessions === ""
+        ? null
+        : Number(numberOfSessions);
+
+    if (
+      sessions !== null &&
+      (!Number.isInteger(sessions) || sessions < 1)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "تعداد جلسات کلاس معتبر نیست.",
         },
         { status: 400 }
       );
@@ -132,22 +145,32 @@ export async function POST(request: Request) {
             ? String(descriptionEn).trim()
             : null,
 
-        day: String(day),
-        startTime: String(startTime),
-        endTime: String(endTime),
+        teacher:
+          teacher && String(teacher).trim()
+            ? String(teacher).trim()
+            : null,
+
+        day:
+          day && String(day).trim()
+            ? String(day).trim()
+            : null,
+
+        startTime:
+          startTime && String(startTime).trim()
+            ? String(startTime).trim()
+            : null,
+
+        endTime:
+          endTime && String(endTime).trim()
+            ? String(endTime).trim()
+            : null,
 
         format:
           format && String(format).trim()
             ? String(format).trim()
             : null,
 
-        startDate: startDate
-          ? new Date(startDate)
-          : null,
-
-        endDate: endDate
-          ? new Date(endDate)
-          : null,
+        numberOfSessions: sessions,
 
         maxStudents: capacity,
 
@@ -193,12 +216,12 @@ export async function PUT(request: Request) {
       descriptionFa,
       descriptionDe,
       descriptionEn,
+      teacher,
       day,
       startTime,
       endTime,
       format,
-      startDate,
-      endDate,
+      numberOfSessions,
       maxStudents,
       price,
       currency,
@@ -214,14 +237,7 @@ export async function PUT(request: Request) {
       );
     }
 
-    if (
-      !titleFa ||
-      !titleDe ||
-      !titleEn ||
-      !day ||
-      !startTime ||
-      !endTime
-    ) {
+    if (!titleFa || !titleDe || !titleEn) {
       return NextResponse.json(
         {
           success: false,
@@ -235,7 +251,7 @@ export async function PUT(request: Request) {
       maxStudents === undefined ||
       maxStudents === null ||
       maxStudents === ""
-        ? 7
+        ? 10
         : Number(maxStudents);
 
     if (
@@ -246,7 +262,27 @@ export async function PUT(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          message: "ظرفیت کلاس باید بین 1 تا 7 نفر باشد.",
+          message: "ظرفیت کلاس باید بین 1 تا 10 نفر باشد.",
+        },
+        { status: 400 }
+      );
+    }
+
+    const sessions =
+      numberOfSessions === undefined ||
+      numberOfSessions === null ||
+      numberOfSessions === ""
+        ? null
+        : Number(numberOfSessions);
+
+    if (
+      sessions !== null &&
+      (!Number.isInteger(sessions) || sessions < 1)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "تعداد جلسات کلاس معتبر نیست.",
         },
         { status: 400 }
       );
@@ -300,22 +336,32 @@ export async function PUT(request: Request) {
             ? String(descriptionEn).trim()
             : null,
 
-        day: String(day),
-        startTime: String(startTime),
-        endTime: String(endTime),
+        teacher:
+          teacher && String(teacher).trim()
+            ? String(teacher).trim()
+            : null,
+
+        day:
+          day && String(day).trim()
+            ? String(day).trim()
+            : null,
+
+        startTime:
+          startTime && String(startTime).trim()
+            ? String(startTime).trim()
+            : null,
+
+        endTime:
+          endTime && String(endTime).trim()
+            ? String(endTime).trim()
+            : null,
 
         format:
           format && String(format).trim()
             ? String(format).trim()
             : null,
 
-        startDate: startDate
-          ? new Date(startDate)
-          : null,
-
-        endDate: endDate
-          ? new Date(endDate)
-          : null,
+        numberOfSessions: sessions,
 
         maxStudents: capacity,
 

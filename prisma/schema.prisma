@@ -62,27 +62,26 @@ model News {
 }
 
 model Class {
-  id            Int       @id @default(autoincrement())
-  title         String?
-  description   String?
-  day           String
-  startTime     String
-  endTime       String
-  startDate     DateTime?
-  endDate       DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  titleFa       String?
-  titleDe       String?
-  titleEn       String?
-  descriptionFa String?
-  descriptionDe String?
-  descriptionEn String?
-  format        String?
-  maxStudents   Int       @default(7)
-  price         Float?
-  currency      String?
-  teacher       String?
+  id               Int       @id @default(autoincrement())
+  title            String?
+  description      String?
+  day              String?
+  startTime        String?
+  endTime          String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  titleFa          String?
+  titleDe          String?
+  titleEn          String?
+  descriptionFa    String?
+  descriptionDe    String?
+  descriptionEn    String?
+  format           String?
+  maxStudents      Int       @default(10)
+  numberOfSessions Int?
+  price            Float?
+  currency         String?
+  teacher          String?
 
   payments    Payment[]
   evaluations Evaluation[]
@@ -127,7 +126,7 @@ model Evaluation {
 
   grammar   Float
   speaking  Float
-  writing   Float
+  writing  Float
   listening Float
 
   createdAt DateTime @default(now())
