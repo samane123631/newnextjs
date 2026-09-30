@@ -153,32 +153,120 @@ export default async function CourseDetailsPage({ params }: Props) {
     return selectedDay.en;
   }
 
+  function getTeacher(teacher: string | null) {
+    if (!teacher) {
+      return "-";
+    }
+
+    const teachers: Record<
+      string,
+      {
+        fa: string;
+        de: string;
+        en: string;
+      }
+    > = {
+      "Herr Eftekharzadeh": {
+        fa: "استاد افتخارزاده",
+        de: "Herr Eftekharzadeh",
+        en: "Mr. Eftekharzadeh",
+      },
+
+      "Mrs Azadi": {
+        fa: "سرکار خانم آزادی",
+        de: "Mrs Azadi",
+        en: "Mrs Azadi",
+      },
+    };
+
+    const selectedTeacher = teachers[teacher];
+
+    if (!selectedTeacher) {
+      return teacher;
+    }
+
+    if (locale === "fa") {
+      return selectedTeacher.fa;
+    }
+
+    if (locale === "de") {
+      return selectedTeacher.de;
+    }
+
+    return selectedTeacher.en;
+  }
+
   function getFormat(format: string | null) {
     if (!format) {
       return "-";
     }
 
-    if (format === "Online") {
-      if (locale === "fa") {
-        return "آنلاین";
+    const formats: Record<
+      string,
+      {
+        fa: string;
+        de: string;
+        en: string;
       }
+    > = {
+      "Online - Intensive": {
+        fa: "آنلاین - فشرده",
+        de: "Online - Intensiv",
+        en: "Online - Intensive",
+      },
 
-      return "Online";
+      "Online - Normal": {
+        fa: "آنلاین - عادی",
+        de: "Online - Normal",
+        en: "Online - Normal",
+      },
+
+      "Präsenz - Group": {
+        fa: "حضوری - گروهی",
+        de: "Präsenz - Gruppe",
+        en: "In-person - Group",
+      },
+
+      "Präsenz - Private - Intensive": {
+        fa: "حضوری - خصوصی - فشرده",
+        de: "Präsenz - Privat - Intensiv",
+        en: "In-person - Private - Intensive",
+      },
+
+      "Präsenz - Private - Normal": {
+        fa: "حضوری - خصوصی - عادی",
+        de: "Präsenz - Privat - Normal",
+        en: "In-person - Private - Normal",
+      },
+
+      Online: {
+        fa: "آنلاین",
+        de: "Online",
+        en: "Online",
+      },
+
+      Präsenz: {
+        fa: "حضوری",
+        de: "Präsenz",
+        en: "In-person",
+      },
+    };
+
+    const selectedFormat = formats[format];
+
+    if (!selectedFormat) {
+      return format;
     }
 
-    if (format === "Präsenz") {
-      if (locale === "fa") {
-        return "حضوری";
-      }
-
-      if (locale === "de") {
-        return "Präsenz";
-      }
-
-      return "In-person";
+    if (locale === "fa") {
+      return selectedFormat.fa;
     }
 
-    return format;
+    if (locale === "de") {
+      return selectedFormat.de;
+    }
+
+    return selectedFormat.en;
   }
 
   function getDuration(numberOfSessions: number | null) {
@@ -239,8 +327,8 @@ export default async function CourseDetailsPage({ params }: Props) {
 
             <div>
               👨‍🏫{" "}
-              <strong>Teacher:</strong>{" "}
-              {classItem.teacher || "-"}
+              <strong>{t("teacher")}:</strong>{" "}
+              {getTeacher(classItem.teacher)}
             </div>
 
             <div>
