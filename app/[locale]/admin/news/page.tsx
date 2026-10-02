@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 type NewsItem = {
@@ -11,6 +12,7 @@ type NewsItem = {
   titleEn: string;
   contentEn: string;
   published: boolean;
+  imageUrl: string | null;
   createdAt: string;
 };
 
@@ -41,6 +43,13 @@ export default function AdminNewsPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  // اندازه کادر Preview
+  const [imageWidth, setImageWidth] = useState(600);
+  const [imageHeight, setImageHeight] = useState(300);
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -141,6 +150,9 @@ export default function AdminNewsPage() {
       published: item.published,
     });
 
+    setImageFile(null);
+    setImagePreview(item.imageUrl);
+
     setError("");
     setSuccess("");
 
@@ -153,8 +165,36 @@ export default function AdminNewsPage() {
   function cancelEdit() {
     setEditingId(null);
     setForm(emptyForm);
+    setImageFile(null);
+    setImagePreview(null);
     setError("");
     setSuccess("");
+  }
+
+  async function uploadNewsImage(newsId: number) {
+    if (!imageFile) {
+      return;
+    }
+
+    const imageFormData = new FormData();
+    imageFormData.append("file", imageFile);
+
+    const response = await fetch(
+      `/api/news/${newsId}/image`,
+      {
+        method: "POST",
+        credentials: "include",
+        body: imageFormData,
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      throw new Error(
+        data.message || "آپلود تصویر خبر ناموفق بود."
+      );
+    }
   }
 
   async function handleSubmit(
@@ -208,14 +248,30 @@ export default function AdminNewsPage() {
         );
       }
 
+      const savedNewsId = data.news?.id;
+
+      if (!savedNewsId) {
+        throw new Error(
+          "شناسه خبر بعد از ذخیره دریافت نشد."
+        );
+      }
+
+      if (imageFile) {
+        await uploadNewsImage(savedNewsId);
+      }
+
       setSuccess(
         editingId === null
-          ? "خبر با موفقیت اضافه شد."
-          : "خبر با موفقیت ویرایش شد."
+          ? "خبر و تصویر با موفقیت اضافه شدند."
+          : imageFile
+            ? "خبر و تصویر با موفقیت ویرایش شدند."
+            : "خبر با موفقیت ویرایش شد."
       );
 
       setEditingId(null);
       setForm(emptyForm);
+      setImageFile(null);
+      setImagePreview(null);
 
       await loadNewsAfterAction();
     } catch (error) {
@@ -268,6 +324,8 @@ export default function AdminNewsPage() {
       if (editingId === id) {
         setEditingId(null);
         setForm(emptyForm);
+        setImageFile(null);
+        setImagePreview(null);
       }
 
       await loadNewsAfterAction();
@@ -510,6 +568,117 @@ export default function AdminNewsPage() {
               </div>
             </div>
 
+            {/* News Image */}
+            <div className="rounded-xl border border-gray-200 p-5">
+              <h3 className="mb-5 text-xl font-bold text-gray-800">
+                🖼️ تصویر خبر
+              </h3>
+
+              <div className="space-y-5">
+
+                {/* Image Size Controls */}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block font-semibold text-gray-700">
+                      عرض کادر تصویر (px)
+                    </label>
+
+                    <input
+                      type="number"
+                      min={100}
+                      max={1200}
+                      value={imageWidth}
+                      onChange={(event) =>
+                        setImageWidth(
+                          Math.max(
+                            100,
+                            Math.min(
+                              1200,
+                              Number(event.target.value) || 100
+                            )
+                          )
+                        )
+                      }
+                      className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block font-semibold text-gray-700">
+                      ارتفاع کادر تصویر (px)
+                    </label>
+
+                    <input
+                      type="number"
+                      min={100}
+                      max={800}
+                      value={imageHeight}
+                      onChange={(event) =>
+                        setImageHeight(
+                          Math.max(
+                            100,
+                            Math.min(
+                              800,
+                              Number(event.target.value) || 100
+                            )
+                          )
+                        )
+                      }
+                      className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                    />
+                  </div>
+                </div>
+
+                <p className="text-sm text-gray-500">
+                  اندازه فایل اصلی تغییر نمی‌کند؛ فقط اندازه کادر نمایش تصویر تغییر می‌کند.
+                </p>
+
+                {/* Image Preview */}
+                {imagePreview && (
+                  <div className="overflow-auto rounded-xl bg-gray-50 p-4">
+                    <div
+                      className="relative overflow-hidden rounded-xl bg-white"
+                      style={{
+                        width: `${imageWidth}px`,
+                        height: `${imageHeight}px`,
+                      }}
+                    >
+                      <Image
+                        src={imagePreview}
+                        alt="پیش‌نمایش تصویر خبر"
+                        fill
+                        className="object-contain"
+                        unoptimized
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* File Input */}
+                <input
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={(event) => {
+                    const file =
+                      event.target.files?.[0] || null;
+
+                    setImageFile(file);
+
+                    if (file) {
+                      setImagePreview(
+                        URL.createObjectURL(file)
+                      );
+                    }
+                  }}
+                  className="block w-full rounded-lg border border-gray-300 px-4 py-3 text-sm"
+                />
+
+                <p className="text-sm text-gray-500">
+                  فرمت‌های مجاز: JPG، PNG و WebP — حداکثر 5MB
+                </p>
+              </div>
+            </div>
+
             {/* Published */}
             <label className="flex cursor-pointer items-center gap-3">
               <input
@@ -579,6 +748,18 @@ export default function AdminNewsPage() {
                 >
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0">
+                      {item.imageUrl && (
+                        <div className="relative mb-4 h-40 w-full max-w-md overflow-hidden rounded-xl bg-gray-100">
+                          <Image
+                            src={item.imageUrl}
+                            alt={item.titleFa}
+                            fill
+                            className="object-contain"
+                            unoptimized
+                          />
+                        </div>
+                      )}
+
                       <h3 className="text-xl font-bold text-gray-800">
                         {item.titleFa}
                       </h3>

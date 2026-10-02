@@ -1,4 +1,5 @@
 import { prisma } from "../../../../lib/prisma";
+import NewsImage from "./NewsImage";
 
 type Locale = "de" | "en" | "fa";
 
@@ -28,6 +29,7 @@ export default async function NewsPage({
       contentDe: true,
       titleEn: true,
       contentEn: true,
+      imageUrl: true,
       createdAt: true,
     },
   });
@@ -91,6 +93,14 @@ export default async function NewsPage({
                   key={item.id}
                   className="rounded-2xl bg-white p-6 shadow-md transition hover:shadow-lg sm:p-8"
                 >
+                  {/* News Image */}
+                  {item.imageUrl && item.imageUrl.trim() !== "" && (
+                    <NewsImage
+                      src={item.imageUrl}
+                      alt={title}
+                    />
+                  )}
+
                   <h2 className="text-2xl font-bold text-gray-800">
                     {title}
                   </h2>
