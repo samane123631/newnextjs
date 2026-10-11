@@ -7,6 +7,14 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type",
 };
 
+function normalizeTeacherName(value: string | null | undefined) {
+  return (value ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/^(herr|frau|mrs|mr|ms)\.?\s+/i, "")
+    .replace(/\s+/g, " ");
+}
+
 export async function OPTIONS() {
   return new NextResponse(null, {
     status: 204,
@@ -17,10 +25,9 @@ export async function OPTIONS() {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-
     const teacherId = Number(searchParams.get("teacherId"));
 
-    if (Number.isNaN(teacherId)) {
+    if (!Number.isInteger(teacherId) || teacherId <= 0) {
       return NextResponse.json(
         {
           success: false,
@@ -33,7 +40,6 @@ export async function GET(request: Request) {
       );
     }
 
-    // Find the logged-in teacher
     const teacher = await prisma.teacher.findUnique({
       where: {
         id: teacherId,
@@ -56,28 +62,35 @@ export async function GET(request: Request) {
       );
     }
 
-    // Get all classes
     const allClasses = await prisma.class.findMany({
       orderBy: {
         createdAt: "desc",
       },
     });
 
-    // The teacher's name can be stored
-    // in any of the description fields.
-    const teacherName = teacher.firstName.trim().toLowerCase();
+    const teacherName = normalizeTeacherName(teacher.firstName);
 
     const classes = allClasses.filter((classItem) => {
-      const descriptions = [
+      const teacherFields = [
+        classItem.teacher,
         classItem.description,
         classItem.descriptionFa,
         classItem.descriptionDe,
         classItem.descriptionEn,
       ];
 
-      return descriptions.some((description) =>
-        description?.trim().toLowerCase().includes(teacherName)
-      );
+      return teacherFields.some((value) => {
+        if (typeof value !== "string") {
+          return false;
+        }
+
+        const normalizedValue = normalizeTeacherName(value);
+
+        return (
+          normalizedValue === teacherName ||
+          normalizedValue.includes(teacherName)
+        );
+      });
     });
 
     return NextResponse.json(
